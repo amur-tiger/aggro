@@ -1,0 +1,14 @@
+{
+  "name": "@aggro/aggro",
+  "version": "1.0.0",
+  "description": "Aggregator",
+  "license": "MIT",
+  "author": "Arne 'TigeR' Linck",
+  "keywords": [
+    "Feed",
+    "Aggregator"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
