@@ -3,12 +3,17 @@ import Express from "express";
 import { Container } from "typedi";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
+import { Logger } from "./service/logger";
 import { FeedResolver } from "./resolver/feed/feed-resolver";
 import { initContainer } from "./container";
 
 async function main() {
-  initContainer();
+  const logger = new Logger("main");
+  logger.info("Initializing");
 
+  await initContainer();
+
+  logger.info("Building GraphQL Schema");
   const schema = await buildSchema({
     resolvers: [FeedResolver],
     container: Container,
@@ -20,11 +25,13 @@ async function main() {
     schema,
   });
 
+  logger.info("Starting Server");
   await server.start();
   server.applyMiddleware({ app });
 
-  app.listen(3000, () => {
-    console.log(`Server running on http://localhost:3000/graphql`);
+  const port = Container.get<number>("port");
+  app.listen(port, () => {
+    logger.info(`Server running on http://localhost:${port}/graphql`);
   });
 }
 
