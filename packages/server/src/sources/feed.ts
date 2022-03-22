@@ -15,6 +15,5 @@ export abstract class Feed {
   @Field(() => String, { nullable: true })
   public readonly title: string | undefined;
 
-  @Field(() => [FeedEntry])
   public readonly entries: FeedEntry[];
 }

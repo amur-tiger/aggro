@@ -4,6 +4,8 @@ import { Container } from "typedi";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { Logger } from "./service/logger";
+import { Cursor } from "./resolver/pagination/Cursor";
+import { CursorScalar } from "./resolver/pagination/CursorScalar";
 import { FeedResolver } from "./resolver/feed/feed-resolver";
 import { initContainer } from "./container";
 
@@ -15,6 +17,12 @@ async function main() {
 
   logger.info("Building GraphQL Schema");
   const schema = await buildSchema({
+    scalarsMap: [
+      {
+        type: Cursor,
+        scalar: CursorScalar,
+      },
+    ],
     resolvers: [FeedResolver],
     container: Container,
     emitSchemaFile: true,
