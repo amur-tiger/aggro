@@ -1,3 +1,4 @@
+import { join } from "path";
 import "reflect-metadata";
 import Express from "express";
 import { Container } from "typedi";
@@ -29,6 +30,8 @@ async function main() {
   });
 
   const app = Express();
+  app.use(Express.static(join(__dirname, '../../frontend/public')));
+
   const server = new ApolloServer({
     schema,
   });
