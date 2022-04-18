@@ -7,8 +7,9 @@
       "ESNext"
     ],
     "module": "CommonJS",
+    "outDir": "build",
     "rootDir": "src",
     "strict": true,
-    "target": "ES6"
+    "target": "es2021"
   }
 }

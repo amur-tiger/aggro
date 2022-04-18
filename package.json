@@ -9,6 +9,7 @@
     "Aggregator"
   ],
   "scripts": {
+    "build": "pnpm build --recursive",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {

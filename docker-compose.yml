@@ -1,0 +1,27 @@
+version: "3.3"
+
+services:
+  database:
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_DB=aggro
+      - POSTGRES_USER=aggro
+      - POSTGRES_PASSWORD=aggropass
+    volumes:
+      - ./var/database:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  aggro:
+    build: .
+    restart: always
+    environment:
+      - AGGRO_DB_HOST=database
+      - AGGRO_DB_SCHEMA=aggro
+      - AGGRO_DB_USER=aggro
+      - AGGRO_DB_PASSWORD=aggropass
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database

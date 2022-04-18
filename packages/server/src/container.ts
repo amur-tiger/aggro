@@ -8,8 +8,12 @@ export async function initContainer() {
   Container.set(
     DataSource,
     await new DataSource({
-      type: "sqlite",
-      database: "./data.sqlite",
+      type: "postgres",
+      host: process.env.AGGRO_DB_HOST ?? "localhost",
+      port: +(process.env.AGGRO_DB_PORT ?? "5432"),
+      schema: process.env.AGGRO_DB_SCHEMA ?? "aggro",
+      username: process.env.AGGRO_DB_USER ?? "aggro",
+      password: process.env.AGGRO_DB_PASSWORD,
     }).initialize()
   );
   Container.set(Axios, new Axios({}));
