@@ -53,9 +53,6 @@
 
 <style lang="sass">
   .list
-    background-color: var(--paper-color)
-    border-right: 1px solid var(--divider-color)
-    height: 100%
     margin: 0
     padding: 0
 </style>

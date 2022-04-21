@@ -21,7 +21,7 @@ importers:
   packages/frontend:
     specifiers:
       '@apollo/client': ^3.5.10
-      '@smui/drawer': ^6.0.0-beta.15
+      '@smui/drawer': ^6.0.0-beta.16
       autoprefixer: ^10.4.4
       esbuild: ^0.14.28
       esbuild-svelte: ^0.6.3
@@ -35,7 +35,7 @@ importers:
       svelte-preprocess: ^4.10.4
     dependencies:
       '@apollo/client': 3.5.10_graphql@15.8.0
-      '@smui/drawer': 6.0.0-beta.15_svelte@3.46.4+typescript@4.6.2
+      '@smui/drawer': 6.0.0-beta.16_svelte@3.46.4+typescript@4.6.2
       graphql: 15.8.0
       svelte: 3.46.4
       svelte-apollo: 0.5.0_14287ca1d09b8ef124af9b9074ce7cfd
@@ -497,24 +497,24 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /@smui/common/6.0.0-beta.15_svelte@3.46.4+typescript@4.6.2:
-    resolution: {integrity: sha512-FzSKNFxC6IPhyu8YVh1GKHUddPchuvW3spYV59cEZfJHiQwG9NMEjfcCN546QMNXC9qdkrkL8XjOnW7uYZVdnQ==}
+  /@smui/common/6.0.0-beta.16_svelte@3.46.4+typescript@4.6.2:
+    resolution: {integrity: sha512-Ual6505AOP75T+IneOQ6e1tnlhDflJX+yxa9T8Hx5X00MOiULvWACg/RW3c8UEQAc96YnEsA3utv5qDy8tZpmg==}
     dependencies:
       '@material/dom': 13.0.0
       '@tsconfig/svelte': 3.0.0
-      svelte2tsx: 0.4.14_svelte@3.46.4+typescript@4.6.2
+      svelte2tsx: 0.5.9_svelte@3.46.4+typescript@4.6.2
     transitivePeerDependencies:
       - svelte
       - typescript
     dev: false
 
-  /@smui/drawer/6.0.0-beta.15_svelte@3.46.4+typescript@4.6.2:
-    resolution: {integrity: sha512-tLl5j/IVmyoqW9ZfxZxLz4gxph5WRFtrANmh5l76szWjmMhJ5omRvmWs3Ke+26zsQSkW70wN1y5eKJRHif+YOA==}
+  /@smui/drawer/6.0.0-beta.16_svelte@3.46.4+typescript@4.6.2:
+    resolution: {integrity: sha512-BNWQP2ZhFU/oAC8EFxzPvLhpBknaMK0zDwY/WNvYpP0YP0eH6xlZaJoPpPxT1QYdgmXA6EvG2u4FqE+gCWI9fg==}
     dependencies:
       '@material/dom': 13.0.0
       '@material/drawer': 13.0.0
-      '@smui/common': 6.0.0-beta.15_svelte@3.46.4+typescript@4.6.2
-      svelte2tsx: 0.4.14_svelte@3.46.4+typescript@4.6.2
+      '@smui/common': 6.0.0-beta.16_svelte@3.46.4+typescript@4.6.2
+      svelte2tsx: 0.5.9_svelte@3.46.4+typescript@4.6.2
     transitivePeerDependencies:
       - svelte
       - typescript
@@ -2859,8 +2859,8 @@ packages:
     resolution: {integrity: sha512-qKJzw6DpA33CIa+C/rGp4AUdSfii0DOTCzj/2YpSKKayw5WGSS624Et9L1nU1k2OVRS9vaENQXp2CVZNU+xvIg==}
     engines: {node: '>= 8'}
 
-  /svelte2tsx/0.4.14_svelte@3.46.4+typescript@4.6.2:
-    resolution: {integrity: sha512-udF0Z/DA98OfjPFBU1GBJRpYHEvsxA8ozwYVN08AOWMnQyxoSyWWlYspiq2m9xAjLo/pWnhec9z1d6jc9umqjA==}
+  /svelte2tsx/0.5.9_svelte@3.46.4+typescript@4.6.2:
+    resolution: {integrity: sha512-xTDASjlh+rKo4QRhTRYSH87sS7fRoyX67xhGIMPKa3FYqftRHRmMes6nVgEskiuhBovslNHYYpMMg5YM5n/STg==}
     peerDependencies:
       svelte: ^3.24
       typescript: ^4.1.2
