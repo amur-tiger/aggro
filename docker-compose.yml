@@ -18,7 +18,7 @@ services:
     restart: always
     environment:
       - AGGRO_DB_HOST=database
-      - AGGRO_DB_SCHEMA=aggro
+      - AGGRO_DB_NAME=aggro
       - AGGRO_DB_USER=aggro
       - AGGRO_DB_PASSWORD=aggropass
     ports:

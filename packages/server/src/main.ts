@@ -4,17 +4,21 @@ import Express from "express";
 import { Container } from "typedi";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
+import { initContainer } from "./container";
 import { Logger } from "./service/logger";
+import { UserService } from "./service/user/user-service";
 import { Cursor } from "./resolver/pagination/Cursor";
 import { CursorScalar } from "./resolver/pagination/CursorScalar";
 import { FeedResolver } from "./resolver/feed/feed-resolver";
-import { initContainer } from "./container";
 
 async function main() {
   const logger = new Logger("main");
   logger.info("Initializing");
 
   await initContainer();
+
+  const userService = Container.get(UserService);
+  await userService.initAdminAccountIfNecessary();
 
   logger.info("Building GraphQL Schema");
   const schema = await buildSchema({
@@ -30,7 +34,7 @@ async function main() {
   });
 
   const app = Express();
-  app.use(Express.static(join(__dirname, '../../frontend/public')));
+  app.use(Express.static(join(__dirname, "../../frontend/public")));
 
   const server = new ApolloServer({
     schema,
