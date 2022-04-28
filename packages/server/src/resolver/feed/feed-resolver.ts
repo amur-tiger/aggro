@@ -11,11 +11,11 @@ import {
 import { Sources } from "../../sources/sources";
 import { Feed } from "../../sources/feed";
 import { FeedEntry } from "../../sources/feed-entry";
-import { PageInfo } from "../pagination/PageInfo";
-import { Connection } from "../pagination/Connection";
+import { PageInfo } from "../pagination/page-info";
+import { Connection } from "../pagination/connection";
 import { AddFeedInput } from "./model/add-feed-input";
-import { Cursor } from "../pagination/Cursor";
-import { PaginationArgs } from "../pagination/PaginationArgs";
+import { Cursor } from "../pagination/cursor";
+import { PaginationArgs } from "../pagination/pagination-args";
 
 const [FeedEntryPage, FeedEntryEdge] = Connection(FeedEntry);
 

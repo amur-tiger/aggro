@@ -1,6 +1,6 @@
 import { ClassType, Field, Int, ObjectType } from "type-graphql";
-import { PageInfo } from "./PageInfo";
-import { Edge } from "./Edge";
+import { PageInfo } from "./page-info";
+import { Edge } from "./edge";
 
 /**
  * @param TItemClass

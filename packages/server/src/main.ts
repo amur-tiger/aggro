@@ -7,9 +7,10 @@ import { buildSchema } from "type-graphql";
 import { initContainer } from "./container";
 import { Logger } from "./service/logger";
 import { UserService } from "./service/user/user-service";
-import { Cursor } from "./resolver/pagination/Cursor";
-import { CursorScalar } from "./resolver/pagination/CursorScalar";
+import { Cursor } from "./resolver/pagination/cursor";
+import { CursorScalar } from "./resolver/pagination/cursor-scalar";
 import { FeedResolver } from "./resolver/feed/feed-resolver";
+import { SessionResolver } from "./resolver/session/session-resolver";
 
 async function main() {
   const logger = new Logger("main");
@@ -28,7 +29,7 @@ async function main() {
         scalar: CursorScalar,
       },
     ],
-    resolvers: [FeedResolver],
+    resolvers: [FeedResolver, SessionResolver],
     container: Container,
     emitSchemaFile: true,
   });
@@ -46,7 +47,7 @@ async function main() {
 
   const port = Container.get<number>("port");
   app.listen(port, () => {
-    logger.info(`Server running on http://localhost:${port}/graphql`);
+    logger.info(`Server running on http://localhost:${port}/`);
   });
 }
 

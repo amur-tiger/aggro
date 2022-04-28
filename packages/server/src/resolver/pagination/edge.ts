@@ -1,5 +1,5 @@
 import { ClassType, Field, ObjectType } from "type-graphql";
-import { Cursor } from "./Cursor";
+import { Cursor } from "./cursor";
 
 export function Edge<TItem>(TItemClass: ClassType<TItem>) {
   @ObjectType(`${TItemClass.name}Edge`)

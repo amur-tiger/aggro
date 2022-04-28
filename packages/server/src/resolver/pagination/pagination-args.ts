@@ -1,6 +1,6 @@
 import { ArgsType, Field, Int } from "type-graphql";
 import { Min } from "class-validator";
-import { Cursor } from "./Cursor";
+import { Cursor } from "./cursor";
 
 @ArgsType()
 export class PaginationArgs {

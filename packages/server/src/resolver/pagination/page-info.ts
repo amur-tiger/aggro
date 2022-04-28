@@ -1,5 +1,5 @@
 import { Field, ObjectType } from "type-graphql";
-import { Cursor } from "./Cursor";
+import { Cursor } from "./cursor";
 
 @ObjectType()
 export class PageInfo {

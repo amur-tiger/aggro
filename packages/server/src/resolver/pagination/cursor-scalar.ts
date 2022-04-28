@@ -1,6 +1,6 @@
 import { GraphQLScalarType, Kind } from "graphql";
 import { Buffer } from "buffer";
-import { Cursor } from "./Cursor";
+import { Cursor } from "./cursor";
 
 function encode(cursor: Cursor) {
   const data = JSON.stringify({ offset: cursor.offset });
