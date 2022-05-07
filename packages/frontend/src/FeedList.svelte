@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { gql } from "@apollo/client/core";
-  import { query } from "svelte-apollo";
+  import { gql } from "graphql-tag";
+  import { query } from "./graphql";
   import Spinner from "./Spinner.svelte";
+  import { FeedListQuery, FeedListQueryVariables } from "./generated/graphql";
 
-  const feeds = query(gql`
-    query {
+  const feeds = query<FeedListQuery, FeedListQueryVariables>(gql`
+    query FeedList {
       feeds {
         id
         title
@@ -30,15 +31,11 @@
   `);
 </script>
 
-{#if $feeds.loading}
+{#await feeds}
   <Spinner />
-{:else if $feeds.error}
-  <div>
-    Error: {$feeds.error.message}
-  </div>
-{:else}
+{:then data}
   <ul class="list">
-    {#each $feeds.data.feeds as feed}
+    {#each data.feeds as feed}
       <li>
         <span>{feed.title}</span>
         <ol>
@@ -49,7 +46,11 @@
       </li>
     {/each}
   </ul>
-{/if}
+{:catch err}
+  <div>
+    Error: {err.message}
+  </div>
+{/await}
 
 <style lang="sass">
   .list

@@ -26,12 +26,16 @@ export class FeedResolver {
 
   public constructor(private readonly sources: Sources) {}
 
-  @Query(() => [Feed])
+  @Query(() => [Feed], {
+    description: "Returns a list of feeds for the current user.",
+  })
   public async feeds(): Promise<Feed[]> {
     return Array.from(this.feedsCache.values());
   }
 
-  @FieldResolver(() => FeedEntryPage)
+  @FieldResolver(() => FeedEntryPage, {
+    description: "Returns the paginated entries of the current feed.",
+  })
   public async entries(
     @Root() feed: Feed,
     @Args() { first, last, before, after }: PaginationArgs

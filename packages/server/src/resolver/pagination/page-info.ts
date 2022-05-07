@@ -1,7 +1,9 @@
 import { Field, ObjectType } from "type-graphql";
 import { Cursor } from "./cursor";
 
-@ObjectType()
+@ObjectType({
+  description: "Provides information about the current page.",
+})
 export class PageInfo {
   constructor(
     hasPreviousPage: boolean,
@@ -15,15 +17,25 @@ export class PageInfo {
     this.endCursor = endCursor;
   }
 
-  @Field()
+  @Field({
+    description:
+      "Indicates whether more elements exist before the current page.",
+  })
   public readonly hasPreviousPage: boolean;
 
-  @Field()
+  @Field({
+    description:
+      "Indicates whether more elements exist after the current page.",
+  })
   public readonly hasNextPage: boolean;
 
-  @Field()
+  @Field({
+    description: "The cursor to the first element of the current page.",
+  })
   public readonly startCursor: Cursor;
 
-  @Field()
+  @Field({
+    description: "The cursor to the last element of the current page.",
+  })
   public readonly endCursor: Cursor;
 }

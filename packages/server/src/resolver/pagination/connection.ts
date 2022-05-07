@@ -11,7 +11,9 @@ export function Connection<TItem>(TItemClass: ClassType<TItem>) {
   const EdgeClass = Edge(TItemClass);
   type EdgeType = InstanceType<typeof EdgeClass>;
 
-  @ObjectType(`${TItemClass.name}Connection`)
+  @ObjectType(`${TItemClass.name}Connection`, {
+    description: `A pageable list for {@link ${TItemClass.name}} elements that also contains meta information.`,
+  })
   class ConnectionClass {
     constructor(totalCount: number, pageInfo: PageInfo, edges: EdgeType[]) {
       this.totalCount = totalCount;
@@ -19,13 +21,19 @@ export function Connection<TItem>(TItemClass: ClassType<TItem>) {
       this.edges = edges;
     }
 
-    @Field(() => Int)
+    @Field(() => Int, {
+      description: "The total number of elements across all pages.",
+    })
     public readonly totalCount: number;
 
-    @Field(() => PageInfo)
+    @Field(() => PageInfo, {
+      description: "Contains meta information about the current page.",
+    })
     public readonly pageInfo: PageInfo;
 
-    @Field(() => [EdgeClass])
+    @Field(() => [EdgeClass], {
+      description: "Contains the edges of the current page.",
+    })
     public readonly edges: EdgeType[];
   }
 

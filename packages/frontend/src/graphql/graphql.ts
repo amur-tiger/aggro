@@ -1,4 +1,4 @@
-import { DocumentNode } from "graphql";
+import type { TypedDocumentNode } from "@graphql-typed-document-node/core";
 import { GraphqlError } from "./graphql-error";
 
 /**
@@ -9,8 +9,8 @@ import { GraphqlError } from "./graphql-error";
  * @param query
  * @param variables
  */
-export async function query<T, V extends object = {}>(
-  query: DocumentNode,
+export async function query<T = any, V = Record<string, any>>(
+  query: TypedDocumentNode<T, V>,
   variables?: V
 ): Promise<T> {
   const response = await fetch("/graphql", {

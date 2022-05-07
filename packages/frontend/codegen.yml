@@ -1,0 +1,17 @@
+overwrite: true
+schema: "../server/schema.gql"
+documents: "src/**/*.{svelte,ts}"
+hooks:
+  afterOneFileWrite:
+    - prettier --write
+generates:
+  src/generated/graphql.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+    config:
+      immutableTypes: true
+      strictScalars: true
+      scalars:
+        Cursor: string
+      useTypeImports: true

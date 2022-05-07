@@ -1,3 +1,4 @@
+import { readFile } from "fs/promises";
 import { build } from "esbuild";
 import sveltePlugin from "esbuild-svelte";
 import sveltePreprocess from "svelte-preprocess";
@@ -5,8 +6,34 @@ import autoprefixer from "autoprefixer";
 
 const watch = process.argv.some((arg) => arg === "--watch");
 
+function stripGraphQLTag(contents: string): string {
+  if (!contents.includes("gql`")) {
+    return contents;
+  }
+  return contents
+    .replaceAll('import { gql } from "graphql-tag";', "")
+    .replaceAll(
+      /gql`([^`]*)`/gm,
+      (_str, query) => `\`${query.replaceAll(/\s+/gm, " ").trim()}\``
+    );
+}
+
 build({
   plugins: [
+    {
+      name: "strip-graphql-tag",
+      /**
+       * This preprocessor strips "graphql-tag" and inserts queries as strings,
+       * so it's one less dependency in the bundle
+       * @param build
+       */
+      setup(build) {
+        build.onLoad({ filter: /\.ts$/ }, async ({ path }) => ({
+          contents: stripGraphQLTag((await readFile(path)).toString()),
+          loader: "ts",
+        }));
+      },
+    },
     sveltePlugin({
       preprocess: [
         {
@@ -15,25 +42,9 @@ build({
            * so it's one less dependency in the bundle
            * @param content
            */
-          script({ content }) {
-            if (!content.includes("gql`")) {
-              return undefined;
-            }
-
-            content = content.replaceAll(
-              'import { gql } from "graphql-tag";',
-              ""
-            );
-
-            content = content.replaceAll(
-              /gql`([^`]*)`/gm,
-              (_str, query) => `\`${query.replaceAll(/\s+/gm, " ").trim()}\``
-            );
-
-            return {
-              code: content,
-            };
-          },
+          script: ({ content }) => ({
+            code: stripGraphQLTag(content),
+          }),
         },
         sveltePreprocess({
           postcss: {

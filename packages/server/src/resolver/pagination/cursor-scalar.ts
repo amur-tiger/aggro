@@ -21,6 +21,8 @@ function decode(cursor: string) {
 
 export const CursorScalar = new GraphQLScalarType({
   name: "Cursor",
+  description:
+    "An opaque cursor to aid navigation. Should be sent back to the server as-is.",
   serialize(value: unknown) {
     if (!(value instanceof Cursor)) {
       throw new TypeError("CursorScalar can only serialize Cursor objects.");
