@@ -8,11 +8,39 @@ const watch = process.argv.some((arg) => arg === "--watch");
 build({
   plugins: [
     sveltePlugin({
-      preprocess: sveltePreprocess({
-        postcss: {
-          plugins: [autoprefixer()],
+      preprocess: [
+        {
+          /**
+           * This preprocessor strips "graphql-tag" and inserts queries as strings,
+           * so it's one less dependency in the bundle
+           * @param content
+           */
+          script({ content }) {
+            if (!content.includes("gql`")) {
+              return undefined;
+            }
+
+            content = content.replaceAll(
+              'import { gql } from "graphql-tag";',
+              ""
+            );
+
+            content = content.replaceAll(
+              /gql`([^`]*)`/gm,
+              (_str, query) => `\`${query.replaceAll(/\s+/gm, " ").trim()}\``
+            );
+
+            return {
+              code: content,
+            };
+          },
         },
-      }),
+        sveltePreprocess({
+          postcss: {
+            plugins: [autoprefixer()],
+          },
+        }),
+      ],
     }),
   ],
   entryPoints: ["./src/index.ts"],
