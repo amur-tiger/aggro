@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  import Backdrop from "./Backdrop.svelte";
+  import Scrim from "./Scrim.svelte";
 
   export let open = false;
   export let anchor: "left" | "right" = "left";
@@ -26,22 +26,26 @@
   <slot />
 </div>
 
-<Backdrop {open} on:close={handleClose} />
+<Scrim {open} on:close={handleClose} />
 <svelte:window on:keydown={handleKeydown} />
 
 <style lang="sass">
+  @use "../config/shadows"
+
   .drawer
     position: absolute
     top: 0
     bottom: 0
     background-color: white
+    box-shadow: shadows.$elevation-0
     width: 350px
     transition: transform 167ms ease-in
-    will-change: transform
+    will-change: transform, box-shadow
     z-index: 35
 
   .open
     transition: transform 167ms ease-out
+    box-shadow: shadows.$elevation-16
 
   .left
     left: 0
