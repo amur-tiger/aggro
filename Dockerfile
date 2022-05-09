@@ -11,14 +11,14 @@ RUN pnpm config set store-dir /app/.pnpm-store
 
 FROM base AS build
 
-RUN pnpm install --unsafe-perm
+RUN pnpm --unsafe-perm install
 RUN pnpm build
 
 
 
 FROM base AS dependencies
 
-RUN pnpm install --unsafe-perm --ignore-scripts --prod --filter @aggro/server...
+RUN pnpm --unsafe-perm --ignore-scripts --prod --filter @aggro/server... install
 
 
 
