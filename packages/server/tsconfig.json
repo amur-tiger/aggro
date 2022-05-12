@@ -3,13 +3,17 @@
     "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": [
-      "ESNext"
-    ],
+    "lib": ["ESNext"],
     "module": "CommonJS",
     "outDir": "build",
+    "resolveJsonModule": true,
     "rootDir": "src",
     "strict": true,
     "target": "es2021"
-  }
+  },
+  "references": [
+    {
+      "path": "../../"
+    }
+  ]
 }

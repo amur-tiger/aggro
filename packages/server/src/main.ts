@@ -11,6 +11,7 @@ import { Cursor } from "./resolver/pagination/cursor";
 import { CursorScalar } from "./resolver/pagination/cursor-scalar";
 import { FeedResolver } from "./resolver/feed/feed-resolver";
 import { SessionResolver } from "./resolver/session/session-resolver";
+import { ApiService } from "./service/api/api-service";
 
 async function main() {
   const logger = new Logger("main");
@@ -35,15 +36,20 @@ async function main() {
   });
 
   const app = Express();
+  app.use(Express.urlencoded({ extended: true }));
+  app.use(Express.json());
   app.use(Express.static(join(__dirname, "../../frontend/public")));
 
-  const server = new ApolloServer({
+  const apiService = Container.get(ApiService);
+  apiService.applyMiddleware(app, "/api");
+
+  const gqlServer = new ApolloServer({
     schema,
   });
 
   logger.info("Starting Server");
-  await server.start();
-  server.applyMiddleware({ app });
+  await gqlServer.start();
+  gqlServer.applyMiddleware({ app });
 
   const port = Container.get<number>("port");
   app.listen(port, () => {
