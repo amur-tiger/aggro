@@ -31,6 +31,6 @@ export class SessionService {
   }
 
   public async closeSession(session: Session): Promise<void> {
-    await this.repository.delete(session);
+    await this.repository.remove(session);
   }
 }

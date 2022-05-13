@@ -71,6 +71,8 @@ export class ApiService {
         res.json({
           data,
         });
+      } else {
+        res.status(204);
       }
       res.end();
     };

@@ -21,7 +21,7 @@ export class UserService {
   }
 
   public async initAdminAccountIfNecessary() {
-    if (!process.env.AGGRO_USERNAME || !process.env.AGGRO_PASSWORD) {
+    if (!process.env.AGGRO_MAIL || !process.env.AGGRO_PASSWORD) {
       return;
     }
 
@@ -33,13 +33,13 @@ export class UserService {
 
     const id = randomUUID();
     this.logger.info(
-      `Creating initial admin user with id "${id}" and username "${process.env.AGGRO_USERNAME}"`
+      `Creating initial admin user with id "${id}" and username "${process.env.AGGRO_MAIL}"`
     );
 
     const admin = new User(
       id,
-      process.env.AGGRO_USERNAME,
-      "",
+      process.env.AGGRO_USERNAME ?? "admin",
+      process.env.AGGRO_MAIL,
       await this.hashPassword(process.env.AGGRO_PASSWORD)
     );
 

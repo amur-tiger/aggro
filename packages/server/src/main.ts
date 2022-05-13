@@ -12,6 +12,7 @@ import { CursorScalar } from "./resolver/pagination/cursor-scalar";
 import { FeedResolver } from "./resolver/feed/feed-resolver";
 import { SessionResolver } from "./resolver/session/session-resolver";
 import { ApiService } from "./service/api/api-service";
+import { LoginController } from "./api/login-controller";
 
 async function main() {
   const logger = new Logger("main");
@@ -41,6 +42,7 @@ async function main() {
   app.use(Express.static(join(__dirname, "../../frontend/public")));
 
   const apiService = Container.get(ApiService);
+  apiService.addController(LoginController);
   apiService.applyMiddleware(app, "/api");
 
   const gqlServer = new ApolloServer({
@@ -57,4 +59,7 @@ async function main() {
   });
 }
 
-main().catch(console.error);
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
