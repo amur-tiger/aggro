@@ -3,6 +3,8 @@
   import Reset from "./config/Reset.svelte";
   import Theme from "./config/Theme.svelte";
   import Login from "./Login.svelte";
+  import Spinner from "./Spinner.svelte";
+  import { checkLogin, isLoggedIn, logout } from "./auth";
 
   let open = false;
 
@@ -18,10 +20,17 @@
   <Drawer {open} on:close={handleClose} />
 
   <main>
-    main content
-    <button on:click={() => (open = !open)}>open</button>
-
-    <Login />
+    {#await checkLogin()}
+      <Spinner />
+    {:then _}
+      {#if $isLoggedIn}
+        main content
+        <button on:click={() => (open = !open)}>open</button>
+        <button on:click={logout}>Logout</button>
+      {:else}
+        <Login />
+      {/if}
+    {/await}
   </main>
 </div>
 

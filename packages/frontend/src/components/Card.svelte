@@ -12,7 +12,6 @@
 
 <style lang="sass">
   .card
-    border-radius: 4px
     background-color: var(--paper-color)
     padding: 16px
 </style>

@@ -31,6 +31,7 @@
 
 <style lang="sass">
   @use "../config/shadows"
+  @use "../config/animation"
 
   .drawer
     position: absolute
@@ -39,12 +40,12 @@
     background-color: white
     box-shadow: shadows.$elevation-0
     width: 350px
-    transition: transform 167ms ease-in
+    transition: transform animation.$fast ease-in
     will-change: transform, box-shadow
     z-index: 35
 
   .open
-    transition: transform 167ms ease-out
+    transition: transform animation.$fast ease-out
     box-shadow: shadows.$elevation-16
 
   .left
