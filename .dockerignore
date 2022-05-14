@@ -1,1 +1,3 @@
 node_modules
+packages/frontend/public/bundle*
+packages/server/build
