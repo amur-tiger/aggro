@@ -10,7 +10,6 @@ import { UserService } from "./service/user/user-service";
 import { Cursor } from "./resolver/pagination/cursor";
 import { CursorScalar } from "./resolver/pagination/cursor-scalar";
 import { FeedResolver } from "./resolver/feed/feed-resolver";
-import { SessionResolver } from "./resolver/session/session-resolver";
 import { ApiService } from "./service/api/api-service";
 import { LoginController } from "./api/login-controller";
 
@@ -31,7 +30,7 @@ async function main() {
         scalar: CursorScalar,
       },
     ],
-    resolvers: [FeedResolver, SessionResolver],
+    resolvers: [FeedResolver],
     container: Container,
     emitSchemaFile: true,
   });

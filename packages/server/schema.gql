@@ -49,19 +49,8 @@ type FeedEntryEdge {
   node: FeedEntry!
 }
 
-input LoginInput {
-  mail: String!
-  password: String!
-}
-
-input LogoutInput {
-  token: ID!
-}
-
 type Mutation {
   addFeed(input: AddFeedInput!): Feed!
-  login(input: LoginInput!): Session!
-  logout(input: LogoutInput!): Session
 }
 
 """Provides information about the current page."""
@@ -82,8 +71,4 @@ type PageInfo {
 type Query {
   """Returns a list of feeds for the current user."""
   feeds: [Feed!]!
-}
-
-type Session {
-  token: ID!
 }
