@@ -58,6 +58,7 @@ importers:
   packages/server:
     specifiers:
       '@databases/pg': ^5.4.1
+      '@types/cookie-parser': ^1.4.3
       '@types/express': ^4.17.13
       '@types/node': ^17.0.21
       '@types/validator': ^13.7.2
@@ -65,6 +66,7 @@ importers:
       apollo-server-express: ^3.6.4
       axios: ^0.26.1
       class-validator: ^0.13.2
+      cookie-parser: ^1.4.6
       express: ^4.17.3
       graphql: ^15.8.0
       nodemon: ^2.0.16
@@ -80,6 +82,7 @@ importers:
       apollo-server-express: 3.6.4_express@4.17.3+graphql@15.8.0
       axios: 0.26.1
       class-validator: 0.13.2
+      cookie-parser: 1.4.6
       express: 4.17.3
       graphql: 15.8.0
       reflect-metadata: 0.1.13
@@ -88,6 +91,7 @@ importers:
       typedi: 0.10.0
       typeorm: 0.3.0
     devDependencies:
+      '@types/cookie-parser': 1.4.3
       '@types/express': 4.17.13
       '@types/node': 17.0.21
       '@types/validator': 13.7.2
@@ -1463,6 +1467,12 @@ packages:
     dependencies:
       '@types/node': 17.0.21
 
+  /@types/cookie-parser/1.4.3:
+    resolution: {integrity: sha512-CqSKwFwefj4PzZ5n/iwad/bow2hTCh0FlNAeWLtQM3JA/NX/iYagIpWG2cf1bQKQ2c9gU2log5VUCrn7LDOs0w==}
+    dependencies:
+      '@types/express': 4.17.13
+    dev: true
+
   /@types/cors/2.8.12:
     resolution: {integrity: sha512-vt+kDhq/M2ayberEtJcIN/hxXy1Pk+59g2FV/ZQceeaTyCtCucjL2Q7FXlFjtWn4n15KCr1NE2lNNFhp0lEThw==}
     dev: false
@@ -2379,8 +2389,21 @@ packages:
       safe-buffer: 5.1.2
     dev: true
 
+  /cookie-parser/1.4.6:
+    resolution: {integrity: sha512-z3IzaNjdwUC2olLIB5/ITd0/setiaFMLYiZJle7xg5Fe9KWAceil7xszYfHHBtDFYLSgJduS2Ty0P1uJdPDJeA==}
+    engines: {node: '>= 0.8.0'}
+    dependencies:
+      cookie: 0.4.1
+      cookie-signature: 1.0.6
+    dev: false
+
   /cookie-signature/1.0.6:
     resolution: {integrity: sha1-4wOogrNCzD7oylE6eZmXNNqzriw=}
+    dev: false
+
+  /cookie/0.4.1:
+    resolution: {integrity: sha512-ZwrFkGJxUR3EIoXtO+yVE69Eb7KlixbaeAWfBQB9vVsNn/o+Yw69gBWSSDK825hQNdN+wF8zELf3dFNl/kxkUA==}
+    engines: {node: '>= 0.6'}
     dev: false
 
   /cookie/0.4.2:

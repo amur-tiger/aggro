@@ -33,24 +33,35 @@ export class UserService {
 
     const id = randomUUID();
     this.logger.info(
-      `Creating initial admin user with id "${id}" and username "${process.env.AGGRO_MAIL}"`
+      `Creating initial admin user with id "${id}" and mail "${process.env.AGGRO_MAIL}"`
     );
 
     const admin = new User(
       id,
       process.env.AGGRO_USERNAME ?? "admin",
       process.env.AGGRO_MAIL,
-      await this.hashPassword(process.env.AGGRO_PASSWORD)
+      await this.hashPassword(process.env.AGGRO_PASSWORD),
+      new Date()
     );
 
     await this.repository.insert(admin);
   }
 
   public async findById(id: string): Promise<User | null> {
+    if (!id) {
+      // https://github.com/typeorm/typeorm/issues/2500
+      return null;
+    }
+
     return this.repository.findOneBy({ id });
   }
 
   public async findByMail(mail: string): Promise<User | null> {
+    if (!mail) {
+      // https://github.com/typeorm/typeorm/issues/2500
+      return null;
+    }
+
     return this.repository.findOneBy({ mail });
   }
 

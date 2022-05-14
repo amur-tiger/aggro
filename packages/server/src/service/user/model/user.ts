@@ -2,11 +2,18 @@ import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity()
 export class User {
-  constructor(id: string, username: string, mail: string, password: string) {
+  public constructor(
+    id: string,
+    username: string,
+    mail: string,
+    password: string,
+    registered: Date
+  ) {
     this.id = id;
     this.username = username;
     this.mail = mail;
     this.password = password;
+    this.registered = registered;
   }
 
   @PrimaryColumn()
@@ -20,4 +27,7 @@ export class User {
 
   @Column()
   public password: string;
+
+  @Column("timestamptz")
+  public readonly registered: Date;
 }

@@ -20,9 +20,9 @@ export class Session {
   })
   public readonly user: User;
 
-  @Column()
+  @Column("timestamptz")
   public readonly created: Date;
 
-  @Column()
+  @Column("timestamptz")
   public accessed: Date;
 }

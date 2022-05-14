@@ -1,6 +1,7 @@
 import { join } from "path";
 import "reflect-metadata";
 import Express from "express";
+import cookieParser from "cookie-parser";
 import { Container } from "typedi";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
@@ -12,6 +13,9 @@ import { CursorScalar } from "./resolver/pagination/cursor-scalar";
 import { FeedResolver } from "./resolver/feed/feed-resolver";
 import { ApiService } from "./service/api/api-service";
 import { LoginController } from "./api/login-controller";
+import { authMiddleware } from "./service/api/middleware/auth-middleware";
+import { SessionService } from "./service/session/session-service";
+import { exceptionHandler } from "./service/api/middleware/exception-handler";
 
 async function main() {
   const logger = new Logger("main");
@@ -36,6 +40,7 @@ async function main() {
   });
 
   const app = Express();
+  app.use(cookieParser());
   app.use(Express.urlencoded({ extended: true }));
   app.use(Express.json());
   app.use(Express.static(join(__dirname, "../../frontend/public")));
@@ -50,7 +55,12 @@ async function main() {
 
   logger.info("Starting Server");
   await gqlServer.start();
-  gqlServer.applyMiddleware({ app });
+
+  const path = "/graphql";
+  app.use(path, authMiddleware(Container.get(SessionService), false, path));
+  gqlServer.applyMiddleware({ app, path });
+
+  app.use(exceptionHandler());
 
   const port = Container.get<number>("port");
   app.listen(port, () => {
