@@ -3,6 +3,7 @@
   import Ripple from "./Ripple.svelte";
 
   export let variant: "outlined" | "contained" = "contained";
+  export let disabled = false;
 
   const dispatch = createEventDispatcher();
   const handleClick = (e) => dispatch("click", e);
@@ -12,6 +13,7 @@
   class="button"
   class:contained={variant !== "outlined"}
   class:outlined={variant === "outlined"}
+  {disabled}
   on:click={handleClick}
 >
   <Ripple color={variant === "outlined" ? "secondary" : undefined} />
@@ -44,7 +46,13 @@
     background-color: var(--secondary-color)
     transition: background-color animation.$fast ease-in-out
 
-    &:hover
+    &:disabled
+      background-color: var(--disabled-color)
+
+    &:hover:not(:disabled)
+      background-color: var(--secondary-color-hover)
+
+    &:focus:not(:disabled)
       background-color: var(--secondary-color-hover)
 
   .outlined
@@ -54,6 +62,13 @@
     border-color: var(--secondary-color)
     background-color: transparent
 
-    &:hover
+    &:disabled
+      color: var(--disabled-color)
+      border-color: var(--disabled-color)
+
+    &:hover:not(:disabled)
+      background-color: rgba(255, 255, 255, 0.7)
+
+    &:focus:not(:disabled)
       background-color: rgba(255, 255, 255, 0.7)
 </style>

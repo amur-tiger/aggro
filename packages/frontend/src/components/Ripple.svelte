@@ -12,7 +12,7 @@
     }
 
     if (token) {
-      ref?.classList.remove("active");
+      ref.classList.remove("active");
       clearTimeout(token);
       token = undefined;
     }
@@ -66,6 +66,7 @@
   .ripple
     position: absolute
     border-radius: 50%
+    pointer-events: none
 
   :global(.active)
     transform: scale(0)

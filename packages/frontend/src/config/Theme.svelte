@@ -15,6 +15,7 @@
     --secondary-color-hover: #{lighten($secondaryColor, 10%)};
     --secondary-color-active: #{darken($secondaryColor, 10%)};
     --secondary-contrast-text: #fff;
+    --disabled-color: #c2c2c2;
     --background-color: #f2f2f2;
     --paper-color: #fff;
     --divider-color: #c2c2c2;

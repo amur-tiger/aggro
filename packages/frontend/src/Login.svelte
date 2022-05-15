@@ -6,10 +6,14 @@
 
   let mail = "";
   let password = "";
+  let loading = false;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    login(mail, password);
+    loading = true;
+    login(mail, password).finally(() => {
+      loading = false;
+    });
   };
 </script>
 
@@ -17,7 +21,7 @@
   <Card>
     <h1>Aggro</h1>
 
-    <form on:submit={handleSubmit}>
+    <form on:submit={handleSubmit} class="login-form">
       <div>
         <Textfield
           type="email"
@@ -25,6 +29,7 @@
           bind:value={mail}
           required
           autocomplete="username"
+          helperText="Insert valid e-mail address"
         />
       </div>
 
@@ -34,12 +39,14 @@
           label="Password"
           bind:value={password}
           required
+          minLength="8"
           autocomplete="current-password"
+          helperText="Password must have at least 8 characters"
         />
       </div>
 
       <div class="submit">
-        <Button>Einloggen</Button>
+        <Button disabled={loading}>Einloggen</Button>
       </div>
     </form>
   </Card>
@@ -52,6 +59,9 @@
     display: flex
     align-items: center
     justify-content: center
+
+  .login-form
+    width: 300px
 
   .submit
     text-align: right

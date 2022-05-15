@@ -21,7 +21,9 @@
 
   <main>
     {#await checkLogin()}
-      <Spinner />
+      <div class="centered">
+        <Spinner />
+      </div>
     {:then _}
       {#if $isLoggedIn}
         main content
@@ -42,4 +44,11 @@
     display: flex
     align-items: stretch
     height: 100vh
+
+  .centered
+    width: 100vw
+    height: 100vh
+    display: flex
+    align-items: center
+    justify-content: center
 </style>

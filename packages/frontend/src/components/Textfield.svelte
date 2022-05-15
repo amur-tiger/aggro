@@ -7,8 +7,11 @@
   export let name = undefined;
   export let value: number | string = "";
   export let required = false;
+  export let minLength: number | undefined;
+  export let maxLength: number | undefined;
   export let autocomplete = undefined;
   export let label = "";
+  export let helperText = "";
 
   const id = `t${counter++}`;
   const handleInput = (e: InputEvent) => {
@@ -17,10 +20,26 @@
   };
 </script>
 
-<div class="form-control">
-  <input {id} {type} {name} {value} on:input={handleInput} {required} {autocomplete} />
-  <div class="outline" />
-  <label for={id}>{label}</label>
+<div>
+  <div class="form-control">
+    <input
+      {id}
+      {type}
+      {name}
+      {value}
+      on:input={handleInput}
+      {required}
+      minlength={minLength}
+      maxlength={maxLength}
+      {autocomplete}
+      placeholder=" "
+    />
+    <div class="outline" />
+    <label for={id}>{label}</label>
+    {#if helperText}
+      <div class="helper-text">{helperText}</div>
+    {/if}
+  </div>
 </div>
 
 <style lang="sass">
@@ -34,6 +53,7 @@
       box-sizing: border-box
       padding: 16px
       width: 100%
+      height: 56px
       outline: none
       background: none
       border: none
@@ -56,7 +76,13 @@
       top: 0
       left: 0
       right: 0
-      bottom: 0
+      height: 56px
+
+    .helper-text
+      color: var(--error-color)
+      display: none
+      font-size: .9rem
+      margin: 2px 8px 0
 
     input:hover ~ .outline
       border-color: black
@@ -67,4 +93,14 @@
     input:focus ~ .outline
       border-color: var(--secondary-color)
       border-width: 2px
+
+    input:not(:focus):not(:placeholder-shown):invalid ~ label
+      color: var(--error-color)
+
+    input:not(:focus):not(:placeholder-shown):invalid ~ .outline
+      border-color: var(--error-color)
+      border-width: 2px
+
+    input:not(:focus):not(:placeholder-shown):invalid ~ .helper-text
+      display: block
 </style>
