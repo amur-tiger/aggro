@@ -3,6 +3,7 @@
   import Textfield from "./components/Textfield.svelte";
   import Button from "./components/Button.svelte";
   import { login } from "./auth";
+  import { t } from "./lang";
 
   let mail = "";
   let password = "";
@@ -19,34 +20,34 @@
 
 <div class="centered">
   <Card>
-    <h1>Aggro</h1>
+    <h1>{$t("login.title")}</h1>
 
     <form on:submit={handleSubmit} class="login-form">
       <div>
         <Textfield
           type="email"
-          label="E-Mail"
+          label={$t("login.mail")}
           bind:value={mail}
           required
           autocomplete="username"
-          helperText="Insert valid e-mail address"
+          helperText={$t("login.mail.helper-text")}
         />
       </div>
 
       <div>
         <Textfield
           type="password"
-          label="Password"
+          label={$t("login.password")}
           bind:value={password}
           required
           minLength="8"
           autocomplete="current-password"
-          helperText="Password must have at least 8 characters"
+          helperText={$t("login.password.helper-text")}
         />
       </div>
 
       <div class="submit">
-        <Button disabled={loading}>Einloggen</Button>
+        <Button disabled={loading}>{$t("login.submit")}</Button>
       </div>
     </form>
   </Card>
