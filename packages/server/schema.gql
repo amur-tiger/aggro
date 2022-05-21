@@ -3,7 +3,7 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-input AddFeedInput {
+input AddSourceInput {
   type: String!
   uri: String!
 }
@@ -13,44 +13,13 @@ An opaque cursor to aid navigation. Should be sent back to the server as-is.
 """
 scalar Cursor
 
-type Feed {
-  """Returns the paginated entries of the current feed."""
-  entries(after: Cursor, before: Cursor, first: Int, last: Int): FeedEntryConnection!
-  id: ID!
-  title: String
-}
-
-type FeedEntry {
-  id: ID!
-  link: String
-  title: String
-}
-
 """
-A pageable list for {@link FeedEntry} elements that also contains meta information.
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
 """
-type FeedEntryConnection {
-  """Contains the edges of the current page."""
-  edges: [FeedEntryEdge!]!
-
-  """Contains meta information about the current page."""
-  pageInfo: PageInfo!
-
-  """The total number of elements across all pages."""
-  totalCount: Int!
-}
-
-"""Edge type for {@link FeedEntry} elements."""
-type FeedEntryEdge {
-  """The cursor pointing to the element within the {@link node} field."""
-  cursor: Cursor!
-
-  """The current element."""
-  node: FeedEntry!
-}
+scalar DateTime
 
 type Mutation {
-  addFeed(input: AddFeedInput!): Feed!
+  addSource(input: AddSourceInput!): Source!
 }
 
 """Provides information about the current page."""
@@ -69,6 +38,44 @@ type PageInfo {
 }
 
 type Query {
-  """Returns a list of feeds for the current user."""
-  feeds: [Feed!]!
+  """Returns a list of sources for the current user."""
+  sources(after: Cursor, before: Cursor, first: Int, last: Int, orderBy: SourceSort): SourceConnection!
+}
+
+type Source {
+  added: DateTime!
+  id: ID!
+  lastUpdate: DateTime!
+  link: String!
+  title: String!
+  type: String!
+}
+
+"""
+A pageable list for {@link Source} elements that also contains meta information.
+"""
+type SourceConnection {
+  """Contains the edges of the current page."""
+  edges: [SourceEdge!]!
+
+  """Contains meta information about the current page."""
+  pageInfo: PageInfo!
+
+  """The total number of elements across all pages."""
+  totalCount: Int!
+}
+
+"""Edge type for {@link Source} elements."""
+type SourceEdge {
+  """The cursor pointing to the element within the {@link node} field."""
+  cursor: Cursor!
+
+  """The current element."""
+  node: Source!
+}
+
+enum SourceSort {
+  DATE_ADDED
+  LAST_UPDATED
+  TITLE
 }

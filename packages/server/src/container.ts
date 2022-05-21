@@ -1,24 +1,25 @@
-import { join } from "path";
-import { Container } from "typedi";
-import { DataSource } from "typeorm";
+import { Pool } from "pg";
 import { Axios } from "axios";
 import RssParser from "rss-parser";
+import { Container } from "./core/container/container";
 
-export async function initContainer() {
-  Container.set("port", 3000);
-  Container.set(
-    DataSource,
-    await new DataSource({
-      type: "postgres",
-      host: process.env.AGGRO_DB_HOST ?? "localhost",
-      port: +(process.env.AGGRO_DB_PORT ?? "5432"),
-      database: process.env.AGGRO_DB_NAME ?? "aggro",
-      username: process.env.AGGRO_DB_USER ?? "aggro",
-      password: process.env.AGGRO_DB_PASSWORD ?? "aggropass",
-      entities: [join(__dirname, "**", "*.js"), join(__dirname, "**", "*.ts")],
-      synchronize: true,
-    }).initialize()
+export async function initContainer(): Promise<Container> {
+  const container = new Container();
+
+  container.setInstance("port", 3000);
+  container.set(
+    Pool,
+    () =>
+      new Pool({
+        host: process.env.AGGRO_DB_HOST ?? "localhost",
+        port: +(process.env.AGGRO_DB_PORT ?? "5432"),
+        database: process.env.AGGRO_DB_NAME ?? "aggro",
+        user: process.env.AGGRO_DB_USER ?? "aggro",
+        password: process.env.AGGRO_DB_PASSWORD ?? "aggropass",
+      })
   );
-  Container.set(Axios, new Axios({}));
-  Container.set(RssParser, new RssParser());
+  container.set(Axios, () => new Axios({}));
+  container.set(RssParser, () => new RssParser());
+
+  return container;
 }
