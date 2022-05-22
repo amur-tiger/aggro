@@ -87,6 +87,9 @@ export class UserService {
       return null;
     }
 
+    user.lastlogin = new Date();
+    await this.repository.update(user);
+
     return user;
   }
 }
