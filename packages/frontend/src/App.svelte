@@ -5,6 +5,7 @@
   import Login from "./Login.svelte";
   import Spinner from "./Spinner.svelte";
   import FeedList from "./SourceList.svelte";
+  import Sidebar from "./content/Sidebar.svelte";
   import { checkLogin, isLoggedIn, logout } from "./auth";
 
   let open = false;
@@ -18,8 +19,6 @@
 <Theme />
 
 <div class="container">
-  <Drawer {open} on:close={handleClose} />
-
   <main>
     {#await checkLogin()}
       <div class="centered">
@@ -27,6 +26,10 @@
       </div>
     {:then _}
       {#if $isLoggedIn}
+        <Drawer {open} on:close={handleClose}>
+          <Sidebar />
+        </Drawer>
+
         main content
         <button on:click={() => (open = !open)}>open</button>
         <button on:click={logout}>Logout</button>

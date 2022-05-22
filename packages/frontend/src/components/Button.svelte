@@ -2,7 +2,7 @@
   import { createEventDispatcher } from "svelte";
   import Ripple from "./Ripple.svelte";
 
-  export let variant: "outlined" | "contained" = "contained";
+  export let variant: "contained" | "outlined" | "text" | "list" = "contained";
   export let disabled = false;
 
   const dispatch = createEventDispatcher();
@@ -11,8 +11,10 @@
 
 <button
   class="button"
-  class:contained={variant !== "outlined"}
+  class:contained={variant === "contained"}
   class:outlined={variant === "outlined"}
+  class:text={variant === "text"}
+  class:list={variant === "list"}
   {disabled}
   on:click={handleClick}
 >
@@ -71,4 +73,37 @@
 
     &:focus:not(:disabled)
       background-color: rgba(255, 255, 255, 0.7)
+
+  .text
+    background-color: transparent
+    transition: background-color animation.$fast ease-in-out
+
+    &:disabled
+      color: var(--disabled-color)
+
+    &:hover:not(:disabled)
+      background-color: var(--background-color)
+
+    &:focus:not(:disabled)
+      background-color: var(--background-color)
+
+  .list
+    background-color: transparent
+    transition: background-color animation.$fast ease-in-out
+    width: 100%
+    height: 48px
+    border-radius: 0
+    justify-content: left
+    padding: 8px 16px
+    text-transform: none
+    font-weight: 400
+
+    &:disabled
+      color: var(--disabled-color)
+
+    &:hover:not(:disabled)
+      background-color: var(--background-color)
+
+    &:focus:not(:disabled)
+      background-color: var(--background-color)
 </style>
