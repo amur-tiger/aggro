@@ -16,6 +16,7 @@
     "apollo-server-express": "^3.6.4",
     "axios": "^0.26.1",
     "class-validator": "^0.13.2",
+    "compression-next": "^1.0.3",
     "cookie-parser": "^1.4.6",
     "express": "^4.17.3",
     "graphql": "^15.8.0",
@@ -25,6 +26,7 @@
     "type-graphql": "^1.1.1"
   },
   "devDependencies": {
+    "@types/compression-next": "^1.0.0",
     "@types/cookie-parser": "^1.4.3",
     "@types/express": "^4.17.13",
     "@types/glob": "^7.2.0",

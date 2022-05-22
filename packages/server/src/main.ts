@@ -1,6 +1,7 @@
 import { join } from "path";
 import "reflect-metadata";
 import Express from "express";
+import compression from "compression-next";
 import cookieParser from "cookie-parser";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
@@ -45,6 +46,7 @@ async function main() {
   });
 
   const app = Express();
+  app.use(compression());
   app.use(cookieParser());
   app.use(Express.urlencoded({ extended: true }));
   app.use(Express.json());
