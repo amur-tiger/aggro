@@ -1,11 +1,19 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
   import Button from "../components/Button.svelte";
   import { t } from "../lang";
+
+  const dispatch = createEventDispatcher();
+
+  const andClose = (cb: () => void) => (e: Event) => {
+    cb();
+    dispatch("close", e);
+  };
 </script>
 
 <ol class="sidebar">
   <li>
-    <Button variant="list">
+    <Button variant="list" on:click={andClose(() => history.pushState("", "", "/settings"))}>
       {$t("sidebar.options")}
     </Button>
   </li>

@@ -6,13 +6,24 @@
   import Spinner from "./Spinner.svelte";
   import FeedList from "./SourceList.svelte";
   import Sidebar from "./content/Sidebar.svelte";
+  import Route from "./components/routing/Route.svelte";
   import { checkLogin, isLoggedIn, logout } from "./auth";
+  import { t } from "./lang";
+  import Router from "./components/routing/Router.svelte";
 
   let open = false;
-
   const handleClose = () => {
     open = false;
   };
+
+  $: if (!$isLoggedIn) {
+    sessionStorage.setItem("intended-route", window.location.pathname);
+    history.pushState("", "", "/login");
+  } else {
+    const intended = sessionStorage.getItem("intended-route");
+    sessionStorage.removeItem("intended-route");
+    history.pushState("", "", intended || "/");
+  }
 </script>
 
 <Reset />
@@ -25,19 +36,29 @@
         <Spinner />
       </div>
     {:then _}
-      {#if $isLoggedIn}
-        <Drawer {open} on:close={handleClose}>
-          <Sidebar />
-        </Drawer>
+      <Router>
+        {#if $isLoggedIn}
+          <Drawer {open} on:close={handleClose}>
+            <Sidebar on:close={handleClose} />
+          </Drawer>
 
-        main content
-        <button on:click={() => (open = !open)}>open</button>
-        <button on:click={logout}>Logout</button>
+          <button on:click={() => (open = !open)}>open</button>
+          <button on:click={logout}>Logout</button>
 
-        <FeedList />
-      {:else}
-        <Login />
-      {/if}
+          <Route path="/settings" title={$t("title.settings")}>
+            <button on:click={() => history.pushState("", "", "/")}>
+              Home
+            </button>
+            <FeedList />
+          </Route>
+
+          <Route path="/" fallback>main page</Route>
+        {:else}
+          <Route path="/login" title={$t("title.login")}>
+            <Login />
+          </Route>
+        {/if}
+      </Router>
     {/await}
   </main>
 </div>

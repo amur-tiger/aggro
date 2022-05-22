@@ -81,6 +81,9 @@ async function main() {
   );
   gqlServer.applyMiddleware({ app, path });
 
+  app.use("*", (_, res) => {
+    res.sendFile(join(__dirname, "../../frontend/public/index.html"));
+  });
   app.use(exceptionHandler());
 
   const port = container.get<number>("port");
