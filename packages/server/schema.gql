@@ -4,6 +4,7 @@
 # -----------------------------------------------
 
 input AddSourceInput {
+  title: String!
   type: String!
   uri: String!
 }
@@ -45,10 +46,10 @@ type Query {
 type Source {
   added: DateTime!
   id: ID!
-  lastUpdate: DateTime!
-  link: String!
+  lastUpdate: DateTime
   title: String!
   type: String!
+  uri: String!
 }
 
 """

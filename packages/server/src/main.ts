@@ -15,7 +15,7 @@ import { authMiddleware } from "./core/api/middleware/auth-middleware";
 import { SessionService } from "./domains/session/service/session-service";
 import { exceptionHandler } from "./core/api/middleware/exception-handler";
 import { MigrationsService } from "./core/migrations/migrations-service";
-import { SourcesResolver } from "./_sources/sources/sources-resolver";
+import { SourceResolver } from "./domains/source/api/source-resolver";
 import { UserRepository } from "./domains/user/repository/user-repository";
 
 const logger = new Logger("main");
@@ -39,7 +39,7 @@ async function main() {
         scalar: CursorScalar,
       },
     ],
-    resolvers: [SourcesResolver],
+    resolvers: [SourceResolver],
     container,
     emitSchemaFile: true,
   });
