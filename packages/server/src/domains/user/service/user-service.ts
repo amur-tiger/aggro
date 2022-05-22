@@ -1,9 +1,9 @@
 import { pbkdf2 as pbkdf2_cb, randomBytes, randomUUID } from "crypto";
 import { promisify } from "util";
 import { Logger } from "../../../core/logger";
+import { Service } from "../../../core/container";
 import { UserRepository } from "../repository/user-repository";
-import { User } from "../repository/model/user";
-import { Service } from "../../../core/container/decorators/service";
+import { UserEntity } from "../repository/model/user-entity";
 
 const pbkdf2 = promisify(pbkdf2_cb);
 
@@ -43,7 +43,7 @@ export class UserService {
     });
   }
 
-  public async isValidPassword(user: User, password: string): Promise<boolean> {
+  public async isValidPassword(user: UserEntity, password: string): Promise<boolean> {
     const [, func, args, salt, hash] = user.password.split("$");
     if (func !== "pbkdf2") {
       throw new Error(`Cannot verify "${func}" hash.`);
@@ -76,7 +76,7 @@ export class UserService {
     }$${salt}$${hash.toString("hex")}`;
   }
 
-  public async tryLogin(mail: string, password: string): Promise<User | null> {
+  public async tryLogin(mail: string, password: string): Promise<UserEntity | null> {
     const user = await this.repository.findOneBy("mail", mail);
     if (!user) {
       return null;

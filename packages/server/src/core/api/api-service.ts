@@ -1,14 +1,13 @@
 import { Express } from "express";
 import { ClassType } from "type-graphql";
 import { Logger } from "../logger";
-import { Method, Route } from "./decorators/route";
+import { Container, Service } from "../container";
+import { SessionService } from "../../domains/session";
+import { UserRepository } from "../../domains/user";
 import { authMiddleware } from "./middleware/auth-middleware";
-import { SessionService } from "../../domains/session/service/session-service";
+import { Method, Route } from "./decorators/route";
 import { Public } from "./decorators/public";
-import { UserRepository } from "../../domains/user/repository/user-repository";
-import { Container } from "../container/container";
 import pkg from "../../../../../package.json";
-import { Service } from "../container/decorators/service";
 
 export type ControllerClass = ClassType;
 

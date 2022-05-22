@@ -1,12 +1,12 @@
-import { Service } from "../../../core/container/decorators/service";
-import { Repository } from "../../../core/database/repository";
-import { Source } from "./model/source";
+import { Service } from "../../../core/container";
+import { Repository } from "../../../core/database";
+import { SourceEntity } from "./model/source-entity";
 
 @Service()
-export class SourceRepository extends Repository<Source> {
+export class SourceRepository extends Repository<SourceEntity> {
   protected readonly tableName = "source";
 
-  public async update(entity: Source): Promise<void> {
+  public async update(entity: SourceEntity): Promise<void> {
     await this.client.query(
       `UPDATE source
        SET title = $1,
@@ -17,7 +17,7 @@ export class SourceRepository extends Repository<Source> {
     );
   }
 
-  public async insert(entity: Source): Promise<void> {
+  public async insert(entity: SourceEntity): Promise<void> {
     await this.client.query(
       `INSERT INTO source (id, userid, type, title, uri, added, lastupdate)
        VALUES ($1, $2, $3, $4, $5, $6, $7)`,

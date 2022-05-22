@@ -1,4 +1,4 @@
-export interface Source {
+export interface SourceEntity {
   id: string;
   userid: string;
   type: string;

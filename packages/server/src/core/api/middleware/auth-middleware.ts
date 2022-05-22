@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { Logger } from "../../logger";
-import { SessionService } from "../../../domains/session/service/session-service";
-import { UserRepository } from "../../../domains/user/repository/user-repository";
+import { SessionService } from "../../../domains/session";
+import { UserRepository } from "../../../domains/user";
 import { ForbiddenException } from "../exceptions/forbidden-exception";
 import { UnauthorizedException } from "../exceptions/unauthorized-exception";
 

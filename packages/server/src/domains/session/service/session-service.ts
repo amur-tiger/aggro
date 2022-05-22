@@ -1,9 +1,9 @@
 import { randomBytes, randomUUID } from "crypto";
 import { CookieOptions, Response } from "express";
-import { Session } from "../repository/model/session";
-import { User } from "../../user/repository/model/user";
+import { Service } from "../../../core/container";
+import { UserEntity } from "../../user";
 import { SessionRepository } from "../repository/session-repository";
-import { Service } from "../../../core/container/decorators/service";
+import { SessionEntity } from "../repository/model/session-entity";
 
 const ALPHA_NUMERIC =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -29,12 +29,12 @@ export class SessionService {
     return token;
   }
 
-  public async findSession(token: string): Promise<Session | null> {
+  public async findSession(token: string): Promise<SessionEntity | null> {
     return this.repository.findOneBy("token", token);
   }
 
-  public async startSession(user: User, res: Response): Promise<Session> {
-    const session: Session = {
+  public async startSession(user: UserEntity, res: Response): Promise<SessionEntity> {
+    const session: SessionEntity = {
       id: randomUUID(),
       userid: user.id,
       token: this.createToken(),
@@ -46,13 +46,13 @@ export class SessionService {
     return session;
   }
 
-  public async touch(session: Session, res: Response): Promise<void> {
+  public async touch(session: SessionEntity, res: Response): Promise<void> {
     session.accessed = new Date();
     await this.repository.update(session);
     res.cookie("token", session.token, COOKIE_OPTIONS);
   }
 
-  public async closeSession(session: Session, res: Response): Promise<void> {
+  public async closeSession(session: SessionEntity, res: Response): Promise<void> {
     await this.repository.delete(session);
     res.removeHeader("Set-Cookie");
     res.clearCookie("token", COOKIE_OPTIONS);

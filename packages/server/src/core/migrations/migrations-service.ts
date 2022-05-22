@@ -1,7 +1,7 @@
 import { Pool } from "pg";
 import { Logger } from "../logger";
+import { Service } from "../container";
 import { migrations } from "./steps";
-import { Service } from "../container/decorators/service";
 
 @Service()
 export class MigrationsService {

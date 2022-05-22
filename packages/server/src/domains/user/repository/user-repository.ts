@@ -1,12 +1,12 @@
-import { Repository } from "../../../core/database/repository";
-import { User } from "./model/user";
-import { Service } from "../../../core/container/decorators/service";
+import { Service } from "../../../core/container";
+import { Repository } from "../../../core/database";
+import { UserEntity } from "./model/user-entity";
 
 @Service()
-export class UserRepository extends Repository<User> {
+export class UserRepository extends Repository<UserEntity> {
   protected readonly tableName = "user";
 
-  public async insert(user: User): Promise<void> {
+  public async insert(user: UserEntity): Promise<void> {
     await this.client.query(
       `INSERT INTO "user" (id, username, mail, password, registered, lastlogin)
        VALUES ($1, $2, $3, $4, $5, $6)`,
@@ -21,7 +21,7 @@ export class UserRepository extends Repository<User> {
     );
   }
 
-  public async update(user: User): Promise<void> {
+  public async update(user: UserEntity): Promise<void> {
     await this.client.query(
       `UPDATE "user"
        SET username  = $1,

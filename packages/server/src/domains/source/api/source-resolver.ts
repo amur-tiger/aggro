@@ -1,25 +1,27 @@
 import { randomUUID } from "crypto";
 import { Arg, Args, Mutation, Query, Resolver } from "type-graphql";
-import { PageInfo } from "../../../core/api/pagination/page-info";
-import { Connection } from "../../../core/api/pagination/connection";
-import { Cursor } from "../../../core/api/pagination/cursor";
-import { PaginationArgs } from "../../../core/api/pagination/pagination-args";
-import { CurrentUser } from "../../../core/api/decorators/current-user";
+import {
+  Connection,
+  CurrentUser,
+  Cursor,
+  PageInfo,
+  PaginationArgs,
+} from "../../../core/api";
+import { Service } from "../../../core/container";
+import { Filter } from "../../../core/database";
+import { UserEntity } from "../../user";
 import { SourceSort } from "./model/source-sort";
-import { User } from "../../user/repository/model/user";
-import { Service } from "../../../core/container/decorators/service";
-import { Source } from "./model/source";
-import { Source as DbSource } from "../repository/model/source";
+import { SourceEntity } from "../repository/model/source-entity";
 import { SourceRepository } from "../repository/source-repository";
+import { Source } from "./model/source";
 import { AddSourceInput } from "./model/add-source-input";
-import { Filter } from "../../../core/database/filter";
 
 const [SourcePage, SourceEdge] = Connection(Source);
 
 @Service()
 @Resolver(() => Source)
 export class SourceResolver {
-  private static readonly sortMap: Record<SourceSort, keyof DbSource> = {
+  private static readonly sortMap: Record<SourceSort, keyof SourceEntity> = {
     TITLE: "title",
     DATE_ADDED: "added",
     LAST_UPDATED: "lastupdate",
@@ -31,7 +33,7 @@ export class SourceResolver {
     description: "Returns a list of sources for the current user.",
   })
   public async sources(
-    @CurrentUser() user: User,
+    @CurrentUser() user: UserEntity,
     @Args() args: PaginationArgs,
     @Arg("orderBy", () => SourceSort, { nullable: true })
     orderBy: SourceSort | undefined
@@ -62,10 +64,10 @@ export class SourceResolver {
 
   @Mutation(() => Source)
   public async addSource(
-    @CurrentUser() user: User,
+    @CurrentUser() user: UserEntity,
     @Arg("input") { type, title, uri }: AddSourceInput
   ) {
-    const source: DbSource = {
+    const source: SourceEntity = {
       id: randomUUID(),
       userid: user.id,
       type,

@@ -6,17 +6,17 @@ import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { initContainer } from "./container";
 import { Logger } from "./core/logger";
-import { UserService } from "./domains/user/service/user-service";
-import { Cursor } from "./core/api/pagination/cursor";
-import { CursorScalar } from "./core/api/pagination/cursor-scalar";
-import { ApiService } from "./core/api/api-service";
-import { LoginController } from "./domains/session/api/login-controller";
-import { authMiddleware } from "./core/api/middleware/auth-middleware";
-import { SessionService } from "./domains/session/service/session-service";
-import { exceptionHandler } from "./core/api/middleware/exception-handler";
-import { MigrationsService } from "./core/migrations/migrations-service";
-import { SourceResolver } from "./domains/source/api/source-resolver";
-import { UserRepository } from "./domains/user/repository/user-repository";
+import { MigrationsService } from "./core/migrations";
+import { UserRepository, UserService } from "./domains/user";
+import {
+  ApiService,
+  authMiddleware,
+  Cursor,
+  CursorScalar,
+  exceptionHandler,
+} from "./core/api";
+import { LoginController, SessionService } from "./domains/session";
+import { SourceResolver } from "./domains/source";
 
 const logger = new Logger("main");
 

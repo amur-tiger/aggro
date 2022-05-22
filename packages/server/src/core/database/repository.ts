@@ -1,5 +1,5 @@
 import { Pool } from "pg";
-import { Service } from "../container/decorators/service";
+import { Service } from "../container";
 import { Filter } from "./filter";
 import { QueryBuilder } from "./query-builder";
 

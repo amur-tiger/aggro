@@ -1,6 +1,5 @@
-import { User } from "../../domains/user/repository/model/user";
-import { Cursor } from "../api/pagination/cursor";
-import { PaginationArgs } from "../api/pagination/pagination-args";
+import { UserEntity } from "../../domains/user";
+import { Cursor, PaginationArgs } from "../api";
 
 export class Filter<T> {
   public readonly orderBy: [keyof T, "ASC" | "DESC"];
@@ -15,7 +14,7 @@ export class Filter<T> {
     this.orderBy = [orderBy, direction];
   }
 
-  public user(user: User | string): this {
+  public user(user: UserEntity | string): this {
     this.userId = typeof user === "string" ? user : user.id;
     return this;
   }

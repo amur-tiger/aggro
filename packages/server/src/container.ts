@@ -1,7 +1,7 @@
 import { Pool } from "pg";
 import { Axios } from "axios";
 import RssParser from "rss-parser";
-import { Container } from "./core/container/container";
+import { Container } from "./core/container";
 
 export async function initContainer(): Promise<Container> {
   const container = new Container();

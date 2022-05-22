@@ -15,6 +15,7 @@
     "test": "pnpm --recursive test"
   },
   "devDependencies": {
+    "chokidar": "^3.5.3",
     "concurrently": "^7.1.0"
   }
 }
