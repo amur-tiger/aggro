@@ -14,4 +14,5 @@ generates:
       strictScalars: true
       scalars:
         Cursor: string
+        DateTime: string
       useTypeImports: true

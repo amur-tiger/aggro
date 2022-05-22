@@ -4,6 +4,7 @@
   import Theme from "./config/Theme.svelte";
   import Login from "./Login.svelte";
   import Spinner from "./Spinner.svelte";
+  import FeedList from "./SourceList.svelte";
   import { checkLogin, isLoggedIn, logout } from "./auth";
 
   let open = false;
@@ -29,6 +30,8 @@
         main content
         <button on:click={() => (open = !open)}>open</button>
         <button on:click={logout}>Logout</button>
+
+        <FeedList />
       {:else}
         <Login />
       {/if}
