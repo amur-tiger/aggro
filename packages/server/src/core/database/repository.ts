@@ -1,5 +1,7 @@
 import { Pool } from "pg";
 import { Service } from "../container/decorators/service";
+import { Filter } from "./filter";
+import { QueryBuilder } from "./query-builder";
 
 @Service()
 export abstract class Repository<T extends { id: string }> {
@@ -7,24 +9,80 @@ export abstract class Repository<T extends { id: string }> {
 
   public constructor(protected readonly client: Pool) {}
 
-  public async count(): Promise<number> {
-    const response = await this.client.query(
-      `SELECT COUNT(*)
-       FROM "${this.tableName}"`
-    );
-    return response.rows[0].count;
+  private applyWhere(qb: QueryBuilder, filter: Filter<T>): void {
+    const [key] = filter.orderBy;
+    if (filter.userId != null) {
+      qb.where("userid = :id", { id: filter.userId });
+    }
+    if (filter.beforeId != null) {
+      qb.where(
+        `${key} < (SELECT ${key} FROM "${this.tableName}" WHERE id = :id)`,
+        { id: filter.beforeId }
+      );
+    }
+    if (filter.afterId != null) {
+      qb.where(
+        `${key} > (SELECT ${key} FROM "${this.tableName}" WHERE id = :id)`,
+        { id: filter.afterId }
+      );
+    }
   }
 
-  public async find(spec?: unknown): Promise<T[]> {
-    if (!spec) {
+  public async count(filter?: Filter<T>): Promise<number> {
+    if (!filter) {
       const response = await this.client.query(
-        `SELECT *
+        `SELECT COUNT(*)
          FROM "${this.tableName}"`
       );
+      return response.rows[0].count;
+    }
+
+    const qb = new QueryBuilder();
+    qb.select("COUNT(*)").from(this.tableName);
+    this.applyWhere(qb, filter);
+
+    const [query, parameters] = qb.build();
+    const result = await this.client.query(query, parameters);
+    return result.rows[0].count;
+  }
+
+  public async find(filter?: Filter<T>): Promise<T[]> {
+    if (!filter) {
+      const response = await this.client.query(`
+          SELECT *
+          FROM "${this.tableName}"`);
       return response.rows;
     }
 
-    throw new Error("not implemented");
+    const [key, dir] = filter.orderBy;
+    const qb = new QueryBuilder();
+    qb.select("*").from(this.tableName);
+    this.applyWhere(qb, filter);
+
+    if (filter.lastLimit != null) {
+      qb.limit(filter.lastLimit);
+      qb.orderBy(key as string, dir === "ASC" ? "DESC" : "ASC");
+    } else {
+      if (filter.firstLimit != null) {
+        qb.limit(filter.firstLimit);
+      }
+      qb.orderBy(key as string, dir);
+    }
+
+    let [query, parameters] = qb.build();
+
+    if (filter.lastLimit != null) {
+      query = `SELECT *
+               FROM (${query}) q
+               ORDER BY ${key} ${dir}`;
+      if (filter.firstLimit != null) {
+        parameters.push(filter.firstLimit);
+        query += ` LIMIT $${parameters.length}`;
+      }
+    }
+
+    const result = await this.client.query(query, parameters);
+    return result.rows;
   }
 
   public async findBy<K extends keyof T>(key: K, value: T[K]): Promise<T[]> {
