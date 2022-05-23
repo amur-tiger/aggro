@@ -18,20 +18,15 @@
       variant="list"
       on:click={andClose(() => history.pushState("", "", "/settings"))}
     >
-      <SettingsIcon size="24" />
-      <div class="label">
-        {$t("sidebar.options")}
-      </div>
+      <SettingsIcon size="24" slot="icon" />
+      {$t("sidebar.options")}
     </Button>
   </li>
 </ol>
 
 <style lang="sass">
   .sidebar
-    margin: 0
+    margin: 16px 12px 0
     padding: 0
     list-style: none
-
-  .label
-    padding-left: 8px
 </style>

@@ -11,7 +11,7 @@
     --primary-color-active: #{darken($primaryColor, 10%)};
     --primary-contrast-text: #fff;
     --secondary-color: #{$secondaryColor};
-    --secondary-color-light: #{fade-out($secondaryColor, 0.6)};
+    --secondary-color-light: #{fade-out($secondaryColor, 0.8)};
     --secondary-color-hover: #{lighten($secondaryColor, 10%)};
     --secondary-color-active: #{darken($secondaryColor, 10%)};
     --secondary-contrast-text: #fff;

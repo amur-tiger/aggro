@@ -33,13 +33,16 @@
   @use "../config/shadows"
   @use "../config/animation"
 
+  $borderRadius: 16px
+
   .drawer
     position: absolute
     top: 0
     bottom: 0
     background-color: white
     box-shadow: shadows.$elevation-0
-    width: 350px
+    width: 360px
+    max-width: 100vw
     transition: transform animation.$fast ease-in
     will-change: transform, box-shadow
     z-index: 35
@@ -50,6 +53,8 @@
 
   .left
     left: 0
+    border-top-right-radius: $borderRadius
+    border-bottom-right-radius: $borderRadius
     transform: translateX(-100%)
 
   .left__open
@@ -57,6 +62,8 @@
 
   .right
     right: 0
+    border-top-left-radius: $borderRadius
+    border-bottom-left-radius: $borderRadius
     transform: translateX(100%)
 
   .right__open

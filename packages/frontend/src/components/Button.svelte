@@ -19,11 +19,18 @@
   on:click={handleClick}
 >
   <Ripple color={variant === "outlined" ? "secondary" : undefined} />
-  <slot />
+  <span class="icon">
+    <slot name="icon" />
+  </span>
+  <span class="label">
+    <slot />
+  </span>
 </button>
 
 <style lang="sass">
   @use "../config/animation"
+
+  $height: 40px
 
   .button
     position: relative
@@ -33,20 +40,27 @@
     justify-content: center
     outline: none
     border: none
-    text-transform: uppercase
+    font-size: 1rem
     font-weight: 500
     box-sizing: border-box
     min-width: 64px
-    height: 36px
-    border-radius: 4px
-    padding: 0 16px
+    height: $height
+    border-radius: calc(#{$height} / 2)
+    padding: 0 24px 0 16px
     user-select: none
     cursor: pointer
+    transition: background-color animation.$fast ease-in-out
+
+  .icon
+    display: flex
+    fill: currentColor
+
+  .label
+    margin-left: 8px
 
   .contained
     color: var(--secondary-contrast-text)
     background-color: var(--secondary-color)
-    transition: background-color animation.$fast ease-in-out
 
     &:disabled
       background-color: var(--disabled-color)
@@ -69,32 +83,29 @@
       border-color: var(--disabled-color)
 
     &:hover:not(:disabled)
-      background-color: rgba(255, 255, 255, 0.7)
+      background-color: rgba(0, 0, 0, 0.05)
 
     &:focus:not(:disabled)
-      background-color: rgba(255, 255, 255, 0.7)
+      background-color: rgba(0, 0, 0, 0.05)
 
   .text
     background-color: transparent
-    transition: background-color animation.$fast ease-in-out
 
     &:disabled
       color: var(--disabled-color)
 
     &:hover:not(:disabled)
-      background-color: var(--background-color)
+      background-color: var(--secondary-color-light)
 
     &:focus:not(:disabled)
-      background-color: var(--background-color)
+      background-color: var(--secondary-color-light)
 
   .list
     background-color: transparent
-    transition: background-color animation.$fast ease-in-out
     width: 100%
-    height: 48px
-    border-radius: 0
+    height: 56px
+    border-radius: 28px
     justify-content: left
-    padding: 8px 16px
     text-transform: none
     font-weight: 400
 

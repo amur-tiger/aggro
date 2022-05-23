@@ -66,7 +66,7 @@
       transform: translate(7px, -9px) scale(0.75)
       transform-origin: top left
       background-color: var(--paper-color)
-      padding: 0 10px
+      padding: 0 4px
 
     .outline
       pointer-events: none
@@ -81,7 +81,7 @@
     .helper-text
       color: var(--error-color)
       display: none
-      font-size: .9rem
+      font-size: .84rem
       margin: 2px 8px 0
 
     input:hover ~ .outline

@@ -10,6 +10,8 @@
   import { checkLogin, isLoggedIn, logout } from "./auth";
   import { t } from "./lang";
   import Router from "./components/routing/Router.svelte";
+  import Button from "./components/Button.svelte";
+  import SettingsIcon from "./icons/settings.svg";
 
   let open = false;
   const handleClose = () => {
@@ -42,13 +44,18 @@
             <Sidebar on:close={handleClose} />
           </Drawer>
 
-          <button on:click={() => (open = !open)}>open</button>
-          <button on:click={logout}>Logout</button>
+          <Button on:click={() => (open = !open)}>
+            <SettingsIcon size="18" slot="icon" />
+            Open
+          </Button>
+          <Button variant="outlined" on:click={logout}>
+            Logout
+          </Button>
 
           <Route path="/settings" title={$t("title.settings")}>
-            <button on:click={() => history.pushState("", "", "/")}>
+            <Button variant="text" on:click={() => history.pushState("", "", "/")}>
               Home
-            </button>
+            </Button>
             <FeedList />
           </Route>
 
