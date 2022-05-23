@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
   import Button from "../components/Button.svelte";
+  import SettingsIcon from "../icons/settings.svg";
   import { t } from "../lang";
 
   const dispatch = createEventDispatcher();
@@ -13,8 +14,14 @@
 
 <ol class="sidebar">
   <li>
-    <Button variant="list" on:click={andClose(() => history.pushState("", "", "/settings"))}>
-      {$t("sidebar.options")}
+    <Button
+      variant="list"
+      on:click={andClose(() => history.pushState("", "", "/settings"))}
+    >
+      <SettingsIcon size="24" />
+      <div class="label">
+        {$t("sidebar.options")}
+      </div>
     </Button>
   </li>
 </ol>
@@ -24,4 +31,7 @@
     margin: 0
     padding: 0
     list-style: none
+
+  .label
+    padding-left: 8px
 </style>
