@@ -36,7 +36,7 @@
   $borderRadius: 16px
 
   .drawer
-    position: absolute
+    position: fixed
     top: 0
     bottom: 0
     background-color: white
