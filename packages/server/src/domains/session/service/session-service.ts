@@ -1,5 +1,6 @@
 import { randomBytes, randomUUID } from "crypto";
 import { CookieOptions, Response } from "express";
+import { Logger } from "../../../core/logger";
 import { Service } from "../../../core/container";
 import { UserEntity } from "../../user";
 import { SessionRepository } from "../repository/session-repository";
@@ -8,16 +9,26 @@ import { SessionEntity } from "../repository/model/session-entity";
 const ALPHA_NUMERIC =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
+const IS_DEVELOPMENT = process.env.NODE_ENV === "development";
+
 const COOKIE_OPTIONS: CookieOptions = {
   maxAge: 365 * 24 * 60 * 60 * 1000,
   httpOnly: true,
-  secure: true,
+  secure: !IS_DEVELOPMENT,
   sameSite: "lax",
 };
 
 @Service()
 export class SessionService {
-  public constructor(private readonly repository: SessionRepository) {}
+  private readonly logger = new Logger(SessionService);
+
+  public constructor(private readonly repository: SessionRepository) {
+    if (IS_DEVELOPMENT) {
+      this.logger.warn(
+        "Allowing session cookies over insecure channels (devmode)"
+      );
+    }
+  }
 
   private createToken(): string {
     const buffer = randomBytes(32);
@@ -33,7 +44,10 @@ export class SessionService {
     return this.repository.findOneBy("token", token);
   }
 
-  public async startSession(user: UserEntity, res: Response): Promise<SessionEntity> {
+  public async startSession(
+    user: UserEntity,
+    res: Response
+  ): Promise<SessionEntity> {
     const session: SessionEntity = {
       id: randomUUID(),
       userid: user.id,
@@ -52,7 +66,10 @@ export class SessionService {
     res.cookie("token", session.token, COOKIE_OPTIONS);
   }
 
-  public async closeSession(session: SessionEntity, res: Response): Promise<void> {
+  public async closeSession(
+    session: SessionEntity,
+    res: Response
+  ): Promise<void> {
     await this.repository.delete(session);
     res.removeHeader("Set-Cookie");
     res.clearCookie("token", COOKIE_OPTIONS);
