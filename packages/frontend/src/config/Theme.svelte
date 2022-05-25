@@ -6,13 +6,13 @@
     color: #333;
     font-family: "Open Sans", sans-serif;
     --primary-color: #{$primaryColor};
-    --primary-color-light: #{lighten($primaryColor, 30%)};
-    --primary-color-hover: #{lighten($primaryColor, 10%)};
+    --primary-color-light: #{lighten($primaryColor, 20%)};
+    --primary-color-hover: #{fade-out(lighten($primaryColor, 30%), 0.8)};
     --primary-color-active: #{darken($primaryColor, 10%)};
     --primary-contrast-text: #fff;
     --secondary-color: #{$secondaryColor};
-    --secondary-color-light: #{fade-out($secondaryColor, 0.8)};
-    --secondary-color-hover: #{lighten($secondaryColor, 10%)};
+    --secondary-color-light: #{lighten($secondaryColor, 20%)};
+    --secondary-color-hover: #{fade-out(lighten($secondaryColor, 30%), 0.8)};
     --secondary-color-active: #{darken($secondaryColor, 10%)};
     --secondary-contrast-text: #fff;
     --disabled-color: #c2c2c2;

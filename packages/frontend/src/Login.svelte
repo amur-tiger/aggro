@@ -2,6 +2,7 @@
   import Card from "./components/Card.svelte";
   import Textfield from "./components/Textfield.svelte";
   import Button from "./components/Button.svelte";
+  import AggroIcon from "./icons/aggro.svg";
   import { login } from "./auth";
   import { t } from "./lang";
 
@@ -20,7 +21,10 @@
 
 <div class="centered">
   <Card>
-    <h1>{$t("login.title")}</h1>
+    <h1 class="title">
+      <AggroIcon size="40" />&nbsp;
+      <span>{$t("login.title")}</span>
+    </h1>
 
     <form on:submit={handleSubmit} class="login-form">
       <div>
@@ -63,6 +67,11 @@
 
   .login-form
     width: 300px
+
+  .title
+    display: flex
+    align-items: center
+    fill: var(--primary-color)
 
   .submit
     text-align: right

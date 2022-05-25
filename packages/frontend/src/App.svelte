@@ -11,7 +11,7 @@
   import { t } from "./lang";
   import Router from "./components/routing/Router.svelte";
   import Button from "./components/Button.svelte";
-  import SettingsIcon from "./icons/settings.svg";
+  import AppBar from "./components/AppBar.svelte";
 
   let open = false;
   const handleClose = () => {
@@ -40,27 +40,29 @@
     {:then _}
       <Router>
         {#if $isLoggedIn}
+          <AppBar on:menuclick={() => (open = !open)} />
+
           <Drawer {open} on:close={handleClose}>
             <Sidebar on:close={handleClose} />
           </Drawer>
 
-          <Button on:click={() => (open = !open)}>
-            <SettingsIcon size="18" slot="icon" />
-            Open
-          </Button>
-          <Button variant="outlined" on:click={logout}>
-            Logout
-          </Button>
+          <Button variant="outlined" on:click={logout}>Logout</Button>
 
           <Route path="/settings" title={$t("title.settings")}>
-            <Button variant="text" on:click={() => history.pushState("", "", "/")}>
+            <Button
+              variant="text"
+              on:click={() => history.pushState("", "", "/")}
+            >
               Home
             </Button>
             (settings)
           </Route>
 
           <Route path="/sources" title={$t("title.sources")}>
-            <Button variant="text" on:click={() => history.pushState("", "", "/")}>
+            <Button
+              variant="text"
+              on:click={() => history.pushState("", "", "/")}
+            >
               Home
             </Button>
             <SourceList />
@@ -82,8 +84,6 @@
     background-color: var(--background-color)
 
   .container
-    display: flex
-    align-items: stretch
     height: 100vh
 
   .centered
