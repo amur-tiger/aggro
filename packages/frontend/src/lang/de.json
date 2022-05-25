@@ -6,6 +6,8 @@
   "login.submit": "Einloggen",
   "login.title": "Aggro",
   "sidebar.options": "Optionen",
+  "sidebar.sources": "Quellen",
   "title.login": "Login",
-  "title.settings": "Optionen"
+  "title.settings": "Optionen",
+  "title.sources": "Quellen"
 }

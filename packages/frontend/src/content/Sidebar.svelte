@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
   import Button from "../components/Button.svelte";
+  import CloudIcon from "../icons/cloud.svg";
   import SettingsIcon from "../icons/settings.svg";
   import { t } from "../lang";
 
@@ -14,6 +15,14 @@
 
 <ol class="sidebar">
   <li>
+    <Button
+      variant="list"
+      on:click={andClose(() => history.pushState("", "", "/sources"))}
+    >
+      <CloudIcon size="24" slot="icon" />
+      {$t("sidebar.sources")}
+    </Button>
+
     <Button
       variant="list"
       on:click={andClose(() => history.pushState("", "", "/settings"))}

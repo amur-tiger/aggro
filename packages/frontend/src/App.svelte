@@ -4,7 +4,7 @@
   import Theme from "./config/Theme.svelte";
   import Login from "./Login.svelte";
   import Spinner from "./Spinner.svelte";
-  import FeedList from "./SourceList.svelte";
+  import SourceList from "./SourceList.svelte";
   import Sidebar from "./content/Sidebar.svelte";
   import Route from "./components/routing/Route.svelte";
   import { checkLogin, isLoggedIn, logout } from "./auth";
@@ -56,7 +56,14 @@
             <Button variant="text" on:click={() => history.pushState("", "", "/")}>
               Home
             </Button>
-            <FeedList />
+            (settings)
+          </Route>
+
+          <Route path="/sources" title={$t("title.sources")}>
+            <Button variant="text" on:click={() => history.pushState("", "", "/")}>
+              Home
+            </Button>
+            <SourceList />
           </Route>
 
           <Route path="/" fallback>main page</Route>
