@@ -5,5 +5,5 @@ charset = utf-8
 insert_final_newline = true
 end_of_line = lf
 
-[*.{ts,tsx,css,scss,json}]
+[*.{ts,tsx,css,scss,sass,json,svelte}]
 trim_trailing_whitespace = true

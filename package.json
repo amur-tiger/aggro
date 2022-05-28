@@ -17,5 +17,9 @@
   "devDependencies": {
     "chokidar": "^3.5.3",
     "concurrently": "^7.1.0"
+  },
+  "prettier": {
+    "editorconfig": true,
+    "printWidth": 120
   }
 }

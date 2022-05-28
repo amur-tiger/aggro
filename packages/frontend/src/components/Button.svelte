@@ -2,35 +2,41 @@
   import { createEventDispatcher } from "svelte";
   import Ripple from "./Ripple.svelte";
 
-  export let variant: "contained" | "outlined" | "text" | "icon" | "list" =
-    "contained";
-  export let color: "primary" | "secondary" = "secondary";
-  export let background: "primary" | "secondary" | undefined = undefined;
+  export let variant:
+    | "elevated"
+    | "filled"
+    | "tonal"
+    | "outlined"
+    | "text"
+    | "icon"
+    | "icon-filled"
+    | "drawer" = "filled";
   export let disabled = false;
+  export let fullWidth = false;
 
   const dispatch = createEventDispatcher();
   const handleClick = (e) => dispatch("click", e);
 </script>
 
 <button
-  class="button"
-  class:contained={variant === "contained"}
+  class="button-base typography-body-large"
+  class:elevated={variant === "elevated"}
+  class:filled={variant === "filled"}
+  class:tonal={variant === "tonal"}
   class:outlined={variant === "outlined"}
   class:text={variant === "text"}
   class:icon={variant === "icon"}
-  class:list={variant === "list"}
-  class:primary={color === "primary"}
-  class:secondary={color === "secondary"}
-  class:primary-background={background === "primary"}
-  class:secondary-background={background === "secondary"}
+  class:icon-filled={variant === "icon-filled"}
+  class:drawer={variant === "drawer"}
   {disabled}
+  class:full-width={fullWidth}
   on:click={handleClick}
 >
   <Ripple color={variant === "outlined" ? "secondary" : undefined} />
   <span class="icon-container">
     <slot name="icon" />
   </span>
-  {#if variant !== "icon"}
+  {#if !variant.startsWith("icon")}
     <span class="label">
       <slot />
     </span>
@@ -39,10 +45,9 @@
 
 <style lang="sass">
   @use "../config/animation"
+  @use "../config/mixins"
 
-  $height: 40px
-
-  .button
+  :global(.button-base)
     position: relative
     overflow: hidden
     display: inline-flex
@@ -50,114 +55,127 @@
     justify-content: center
     outline: none
     border: none
-    font-size: 1rem
-    font-weight: 500
     box-sizing: border-box
     min-width: 64px
-    height: $height
-    border-radius: calc(#{$height} / 2)
+    height: 40px
+    border-radius: 20px
     padding: 0 24px 0 16px
     user-select: none
     cursor: pointer
-    transition: background-color animation.$fast ease-in-out
+
+  button
+    .label
+      margin-left: 8px
+
+    .icon-container
+      display: flex
 
     &:disabled
-      color: var(--disabled-color)
+      opacity: 0.38
+      color: var(--color-on-surface)
+      fill: var(--color-on-surface)
 
-    &.primary:hover:not(:disabled)
-      background-color: var(--primary-color-hover)
+    &:not(:disabled):hover
+      @include mixins.tint-hover
 
-    &.secondary:hover:not(:disabled)
-      background-color: var(--secondary-color-hover)
+    &:not(:disabled):focus-visible
+      @include mixins.tint-focus
 
-    &.primary:focus:not(:disabled)
-      background-color: var(--primary-color-hover)
+    &:not(:disabled):active
+      @include mixins.tint-pressed
 
-    &.secondary:focus:not(:disabled)
-      background-color: var(--secondary-color-hover)
+  .full-width
+    width: 100%
 
-  .icon-container
-    display: flex
-    fill: currentColor
+  .elevated
+    background-color: var(--color-surface)
+    color: var(--color-primary)
+    fill: var(--color-primary)
+    transition: box-shadow animation.$faster ease-in-out
+    @include mixins.elevation-shadow-1
+    @include mixins.tint(var(--color-on-surface))
 
-  .label
-    margin-left: 8px
+    &:not(:disabled):hover
+      @include mixins.elevation-shadow-2
 
-  .contained
-    color: var(--secondary-contrast-text)
+  .filled
+    background-color: var(--color-primary)
+    color: var(--color-on-primary)
+    fill: var(--color-on-primary)
+    transition: box-shadow animation.$faster ease-in-out
+    @include mixins.tint(var(--color-on-primary))
 
-    &.primary
-      background-color: var(--primary-color)
+    &:not(:disabled):hover
+      @include mixins.elevation-shadow-1
 
-    &.secondary
-      background-color: var(--secondary-color)
+  .tonal
+    background-color: var(--color-secondary-container)
+    color: var(--color-on-secondary-container)
+    fill: var(--color-on-secondary-container)
+    transition: box-shadow animation.$faster ease-in-out
+    @include mixins.tint(var(--color-on-secondary-container))
 
-    &.primary:hover:not(:disabled)
-      background-color: var(--primary-color-light)
+    &:after
+      background-color: var(--color-on-secondary-container)
 
-    &.secondary:hover:not(:disabled)
-      background-color: var(--secondary-color-light)
+    &:disabled
+      background-color: var(--color-surface)
 
-    &.primary:focus:not(:disabled)
-      background-color: var(--primary-color-light)
-
-    &.secondary:focus:not(:disabled)
-      background-color: var(--secondary-color-light)
+    &:not(:disabled):hover
+      @include mixins.elevation-shadow-1
 
   .outlined
-    border-width: 1px
-    border-style: solid
+    border: 1px solid var(--color-outline)
     background-color: transparent
+    color: var(--color-primary)
+    fill: var(--color-primary)
+    @include mixins.tint(var(--color-primary))
 
-    &.primary
-      color: var(--primary-color)
-      border-color: var(--primary-color)
-
-    &.secondary
-      color: var(--secondary-color)
-      border-color: var(--secondary-color)
+    &:after
+      background-color: var(--color-primary)
 
     &:disabled
-      color: var(--disabled-color)
-      border-color: var(--disabled-color)
+      border-color: var(--color-on-surface)
 
-    &:hover:not(:disabled)
-      background-color: rgba(0, 0, 0, 0.05)
-
-    &:focus:not(:disabled)
-      background-color: rgba(0, 0, 0, 0.05)
-
-  .text, .icon
+  .text
     background-color: transparent
+    color: var(--color-primary)
+    fill: var(--color-primary)
+    @include mixins.tint(var(--color-primary))
 
-    &.primary-background
-      color: var(--primary-contrast-text)
-
-    &.secondary-background
-      color: var(--secondary-contrast-text)
+    &:after
+      background-color: var(--color-primary)
 
   .icon
-    padding: 0
     min-width: unset
-    width: 48px
-    height: 48px
-    border-radius: 24px
+    width: 40px
+    height: 40px
+    border-radius: 20px
+    padding: 0
+    @include mixins.tint(var(--color-primary))
 
-  .list
     background-color: transparent
-    width: 100%
+    color: var(--color-on-surface)
+    fill: var(--color-on-surface)
+
+  .icon-filled
+    min-width: unset
+    width: 40px
+    height: 40px
+    border-radius: 20px
+    padding: 0
+    @include mixins.tint(var(--color-on-primary))
+
+    background-color: var(--color-primary)
+    color: var(--color-on-primary)
+    fill: var(--color-on-primary)
+
+  .drawer
     height: 56px
     border-radius: 28px
-    justify-content: left
-    text-transform: none
-    font-weight: 400
-
-    &:disabled
-      color: var(--disabled-color)
-
-    &:hover:not(:disabled)
-      background-color: var(--background-color)
-
-    &:focus:not(:disabled)
-      background-color: var(--background-color)
+    justify-content: start
+    background-color: var(--color-surface)
+    color: var(--color-on-surface)
+    fill: var(--color-on-surface)
+    @include mixins.tint(var(--color-on-surface))
 </style>

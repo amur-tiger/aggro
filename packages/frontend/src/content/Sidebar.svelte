@@ -16,7 +16,8 @@
 <ol class="sidebar">
   <li>
     <Button
-      variant="list"
+      variant="drawer"
+      fullWidth
       on:click={andClose(() => history.pushState("", "", "/sources"))}
     >
       <CloudIcon size="24" slot="icon" />
@@ -24,7 +25,8 @@
     </Button>
 
     <Button
-      variant="list"
+      variant="drawer"
+      fullWidth
       on:click={andClose(() => history.pushState("", "", "/settings"))}
     >
       <SettingsIcon size="24" slot="icon" />

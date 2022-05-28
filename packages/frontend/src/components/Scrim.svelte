@@ -46,5 +46,5 @@
     z-index: 25
 
   :global(.backdrop__visible)
-    opacity: .5
+    opacity: .4
 </style>

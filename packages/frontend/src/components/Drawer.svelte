@@ -30,40 +30,35 @@
 <svelte:window on:keydown={handleKeydown} />
 
 <style lang="sass">
-  @use "../config/shadows"
   @use "../config/animation"
-
-  $borderRadius: 16px
+  @use "../config/mixins"
 
   .drawer
     position: fixed
     top: 0
     bottom: 0
-    background-color: white
-    box-shadow: shadows.$elevation-0
+    background-color: var(--color-surface)
     width: 360px
     max-width: 100vw
     transition: transform animation.$fast ease-in
-    will-change: transform, box-shadow
     z-index: 35
+    @include mixins.elevation-shadow-1
 
   .open
     transition: transform animation.$fast ease-out
-    box-shadow: shadows.$elevation-16
 
   .left
     left: 0
-    border-top-right-radius: $borderRadius
-    border-bottom-right-radius: $borderRadius
     transform: translateX(-100%)
+    @include mixins.shape-large-end
 
   .left__open
     transform: translateX(0)
 
   .right
     right: 0
-    border-top-left-radius: $borderRadius
-    border-bottom-left-radius: $borderRadius
+    border-top-left-radius: 16px
+    border-bottom-left-radius: 16px
     transform: translateX(100%)
 
   .right__open

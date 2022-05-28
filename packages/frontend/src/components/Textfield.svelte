@@ -3,30 +3,63 @@
 </script>
 
 <script lang="ts">
+  import { onResize } from "../actions/on-resize";
+
   export let type = "text";
   export let name = undefined;
   export let value: number | string = "";
+  export let disabled = false;
   export let required = false;
   export let minLength: number | undefined;
   export let maxLength: number | undefined;
   export let autocomplete = undefined;
   export let label = "";
-  export let helperText = "";
+  export let supportText = "";
+  export let error = false;
 
+  let focused;
+  $: raised = !!value || focused;
   const id = `t${counter++}`;
+  let width = 128;
+  let labelWidth = 32;
+
+  $: borderPath = `M10${focused ? "" : ".5"} 4${
+    focused ? "" : ".5"
+  } h-2 q-4 0 -4 4 v48 q0 4 4 4 h${width - 8} q4 0 4 -4 v-48 q0 -4 -4 -4 ${
+    raised ? `h-${width - labelWidth - 14}` : "z"
+  }`;
+
+  const handleFocus = () => {
+    focused = true;
+  };
+
+  const handleBlur = () => {
+    focused = false;
+  };
+
   const handleInput = (e: InputEvent) => {
     const val = (e.target as HTMLInputElement).value;
     value = type.match(/^(number|range)$/) ? +val : val;
   };
 </script>
 
-<div>
-  <div class="form-control">
+<div class="form-control">
+  <div
+    class="container shape-extra-small"
+    class:focused
+    class:disabled
+    use:onResize={(rect) => (width = rect.width)}
+  >
     <input
+      class="input color-on-surface typography-body-large"
+      class:focused
       {id}
       {type}
       {name}
       {value}
+      {disabled}
+      on:focus={handleFocus}
+      on:blur={handleBlur}
       on:input={handleInput}
       {required}
       minlength={minLength}
@@ -34,73 +67,102 @@
       {autocomplete}
       placeholder=" "
     />
-    <div class="outline" />
-    <label for={id}>{label}</label>
-    {#if helperText}
-      <div class="helper-text">{helperText}</div>
-    {/if}
+    <svg class="outline">
+      <path d={borderPath} />
+    </svg>
+    <label
+      class="label color-on-surface-variant"
+      class:typography-body-large={!raised}
+      class:typography-body-small={raised}
+      class:focused
+      class:raised
+      use:onResize={(rect) => (labelWidth = rect.width)}
+      for={id}
+    >
+      {label}
+    </label>
   </div>
+  {#if supportText}
+    <div
+      class="support-text color-on-surface typography-body-small"
+      class:disabled
+      class:error
+    >
+      {supportText}
+    </div>
+  {/if}
 </div>
 
 <style lang="sass">
+  @use "../config/animation"
+
   .form-control
     margin-top: 16px
     position: relative
-    background-color: var(--paper-color)
 
-    input
-      font: inherit
-      box-sizing: border-box
-      padding: 16px
-      width: 100%
-      height: 56px
-      outline: none
-      background: none
-      border: none
-      filter: none
+  .outline
+    pointer-events: none
+    position: absolute
+    top: -4px
+    left: -4px
+    width: calc(100% + 8px)
+    height: 64px
+    fill: none
 
-    label
-      position: absolute
-      top: 0
-      left: 0
-      transform: translate(7px, -9px) scale(0.75)
-      transform-origin: top left
-      background-color: var(--paper-color)
-      padding: 0 4px
+  .container
+    height: 56px
+    stroke: var(--color-outline)
+    stroke-width: 1px
+    transition: stroke animation.$faster ease-in-out
 
-    .outline
-      pointer-events: none
-      border: 1px solid var(--divider-color)
-      border-radius: 4px
-      position: absolute
-      top: 0
-      left: 0
-      right: 0
-      height: 56px
+    &.disabled
+      .outline
+        opacity: 0.12
 
-    .helper-text
-      color: var(--error-color)
-      display: none
-      font-size: .84rem
-      margin: 2px 8px 0
+      .input, .label
+        opacity: 0.38
 
-    input:hover ~ .outline
-      border-color: black
+    &.focused
+      stroke: var(--color-primary)
+      stroke-width: 2px
 
-    input:focus ~ label
-      color: var(--secondary-color)
+    &:not(.focused):not(.disabled):hover
+      stroke: var(--color-on-surface)
 
-    input:focus ~ .outline
-      border-color: var(--secondary-color)
-      border-width: 2px
+      .label
+        color: var(--color-on-surface)
 
-    input:not(:focus):not(:placeholder-shown):invalid ~ label
-      color: var(--error-color)
+  .input
+    box-sizing: border-box
+    padding: 16px
+    width: 100%
+    height: 56px
+    outline: none
+    background: none
+    border: none
+    filter: none
 
-    input:not(:focus):not(:placeholder-shown):invalid ~ .outline
-      border-color: var(--error-color)
-      border-width: 2px
+  .label
+    pointer-events: none
+    position: absolute
+    top: 0
+    left: 0
+    transform-origin: top left
+    transform: translate(16px, 16px)
+    transition: transform animation.$faster ease-in-out, color animation.$faster ease-in-out
 
-    input:not(:focus):not(:placeholder-shown):invalid ~ .helper-text
-      display: block
+    &.focused
+      color: var(--color-primary)
+
+    &.raised
+      transform: translate(8px, -8px)
+
+  .support-text
+    margin: 4px 16px 0
+
+    &.disabled
+      opacity: 0.38
+
+    &.error
+      color: var(--color-error)
 </style>

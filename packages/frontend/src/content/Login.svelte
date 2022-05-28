@@ -1,10 +1,10 @@
 <script lang="ts">
-  import Card from "./components/Card.svelte";
-  import Textfield from "./components/Textfield.svelte";
-  import Button from "./components/Button.svelte";
-  import AggroIcon from "./icons/aggro.svg";
-  import { login } from "./auth";
-  import { t } from "./lang";
+  import Card from "../components/Card.svelte";
+  import Textfield from "../components/Textfield.svelte";
+  import Button from "../components/Button.svelte";
+  import AggroIcon from "../icons/aggro.svg";
+  import { login } from "../auth";
+  import { t } from "../lang";
 
   let mail = "";
   let password = "";
@@ -12,6 +12,9 @@
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (mail === "" || password === "") {
+      return;
+    }
     loading = true;
     login(mail, password).finally(() => {
       loading = false;
@@ -21,7 +24,7 @@
 
 <div class="centered">
   <Card>
-    <h1 class="title">
+    <h1 slot="header" class="title">
       <AggroIcon size="40" />&nbsp;
       <span>{$t("login.title")}</span>
     </h1>
@@ -34,7 +37,7 @@
           bind:value={mail}
           required
           autocomplete="username"
-          helperText={$t("login.mail.helper-text")}
+          supportText={$t("login.mail.helper-text")}
         />
       </div>
 
@@ -46,14 +49,16 @@
           required
           minLength="8"
           autocomplete="current-password"
-          helperText={$t("login.password.helper-text")}
+          supportText={$t("login.password.helper-text")}
         />
       </div>
-
-      <div class="submit">
-        <Button disabled={loading}>{$t("login.submit")}</Button>
-      </div>
     </form>
+
+    <div slot="actions" class="submit">
+      <Button disabled={loading} on:click={handleSubmit}>
+        {$t("login.submit")}
+      </Button>
+    </div>
   </Card>
 </div>
 
@@ -71,9 +76,9 @@
   .title
     display: flex
     align-items: center
-    fill: var(--primary-color)
+    color: var(--color-on-surface)
+    fill: var(--color-primary)
 
   .submit
     text-align: right
-    margin-top: 16px
 </style>

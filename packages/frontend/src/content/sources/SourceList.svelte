@@ -1,11 +1,12 @@
 <script lang="ts">
   import { gql } from "graphql-tag";
-  import { query } from "./graphql";
-  import Spinner from "./Spinner.svelte";
+  import Spinner from "../../components/Spinner.svelte";
+  import Card from "../../components/Card.svelte";
+  import { query } from "../../graphql";
   import {
     SourceListQuery,
     SourceListQueryVariables,
-  } from "./generated/graphql";
+  } from "../../generated/graphql";
 
   const sources = query<SourceListQuery, SourceListQueryVariables>(gql`
     query SourceList {
@@ -39,10 +40,12 @@
   <ul class="list">
     {#each data.sources.edges as source}
       <li>
-        <span>{source.node.title}</span>
-        <span>(via {source.node.type})</span>
-        <span>at {source.node.uri}</span>
-        <span>added {source.node.added}</span>
+        <Card>
+          <span class="typography-headline-medium">{source.node.title}</span>
+          <span>(via {source.node.type})</span>
+          <span>at {source.node.uri}</span>
+          <span>added {source.node.added}</span>
+        </Card>
       </li>
     {/each}
   </ul>
