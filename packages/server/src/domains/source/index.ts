@@ -9,3 +9,4 @@ export { Source } from './api/model/source';
 export { SourceResolver } from './api/source-resolver';
 export type { SourceEntity } from './repository/model/source-entity';
 export { SourceRepository } from './repository/source-repository';
+export { SourceService } from './service/source-service';

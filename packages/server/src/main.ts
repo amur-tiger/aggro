@@ -9,13 +9,7 @@ import { initContainer } from "./container";
 import { Logger } from "./core/logger";
 import { MigrationsService } from "./core/migrations";
 import { UserRepository, UserService } from "./domains/user";
-import {
-  ApiService,
-  authMiddleware,
-  Cursor,
-  CursorScalar,
-  exceptionHandler,
-} from "./core/api";
+import { ApiService, authMiddleware, Cursor, CursorScalar, exceptionHandler } from "./core/api";
 import { LoginController, SessionService } from "./domains/session";
 import { SourceResolver } from "./domains/source";
 
@@ -70,15 +64,7 @@ async function main() {
   await gqlServer.start();
 
   const path = "/graphql";
-  app.use(
-    path,
-    authMiddleware(
-      container.get(SessionService),
-      container.get(UserRepository),
-      false,
-      path
-    )
-  );
+  app.use(path, authMiddleware(container.get(SessionService), container.get(UserRepository), false, path));
   gqlServer.applyMiddleware({ app, path });
 
   app.use("*", (_, res) => {
