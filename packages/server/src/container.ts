@@ -1,6 +1,4 @@
 import { Pool } from "pg";
-import { Axios } from "axios";
-import RssParser from "rss-parser";
 import { Container } from "./core/container";
 import pkg from "../../../package.json";
 
@@ -20,8 +18,6 @@ export async function initContainer(): Promise<Container> {
         password: process.env.AGGRO_DB_PASSWORD ?? "aggropass",
       })
   );
-  container.set(Axios, () => new Axios({}));
-  container.set(RssParser, () => new RssParser());
 
   return container;
 }

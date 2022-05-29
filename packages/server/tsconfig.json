@@ -10,7 +10,7 @@
     "rootDir": "src",
     "strict": true,
     "target": "es2021",
-    "typeRoots": ["types"]
+    "types": ["jest", "./types/express"]
   },
   "references": [
     {
