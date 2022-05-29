@@ -19,8 +19,19 @@ The javascript `Date` as string. Type represents date and time as the ISO Date s
 """
 scalar DateTime
 
+type DiscoveryItem {
+  title: String!
+  type: String!
+  url: String!
+}
+
+type DiscoveryResult {
+  items: [DiscoveryItem!]!
+}
+
 type Mutation {
   addSource(input: AddSourceInput!): Source!
+  deleteSource(id: ID!): Source!
 }
 
 """Provides information about the current page."""
@@ -39,6 +50,8 @@ type PageInfo {
 }
 
 type Query {
+  discover(url: String!): DiscoveryResult!
+
   """Returns a list of sources for the current user."""
   sources(after: Cursor, before: Cursor, first: Int, last: Int, orderBy: SourceSort): SourceConnection!
 }

@@ -19,7 +19,7 @@
 
     circle {
       fill: transparent;
-      stroke: var(--primary-color);
+      stroke: var(--color-primary);
       stroke-width: 4;
       stroke-linecap: round;
       stroke-dasharray: (3.14 * $spinnerSize);

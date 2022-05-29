@@ -6,11 +6,11 @@ import { GraphqlError } from "./graphql-error";
  *
  * Note: The "query"-Parameter will be transformed into a string during build.
  *
- * @param query
+ * @param document
  * @param variables
  */
 export async function query<T = any, V = Record<string, any>>(
-  query: TypedDocumentNode<T, V>,
+  document: TypedDocumentNode<T, V>,
   variables?: V
 ): Promise<T> {
   const response = await fetch("/graphql", {
@@ -19,13 +19,13 @@ export async function query<T = any, V = Record<string, any>>(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      query,
+      query: document,
       variables,
     }),
   });
 
   if (!response.ok) {
-    throw new Error("Network Error.");
+    throw new Error("HTTP Error.");
   }
 
   const result = await response.json();
@@ -35,4 +35,33 @@ export async function query<T = any, V = Record<string, any>>(
   }
 
   return result.data;
+}
+
+export function lazyQuery<T = any, V = Record<string, any>>(
+  document: TypedDocumentNode<T, V>
+): (variables?: V) => Promise<T> {
+  return async (variables) => {
+    const response = await fetch("/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: document,
+        variables,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("HTTP Error");
+    }
+
+    const result = await response.json();
+
+    if (Array.isArray(result.errors) && result.errors.length > 0) {
+      throw new GraphqlError(result.errors);
+    }
+
+    return result.data;
+  };
 }
