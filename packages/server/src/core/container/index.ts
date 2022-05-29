@@ -4,6 +4,8 @@
 // This file was auto-generated. Do not edit, your changes will be overwritten!
 
 export { Container } from './container';
+export { Arg } from './decorators/arg';
+export type { ArgMetadata } from './decorators/arg';
 export { Service } from './decorators/service';
 export type { ServiceMetadata } from './decorators/service';
 export { ConstructionException } from './exceptions/construction-exception';

@@ -4,6 +4,7 @@ import { ConstructionException } from "./exceptions/construction-exception";
 import type { CacheItem } from "./model/cache-item";
 import type { Factory } from "./model/factory";
 import { Service } from "./decorators/service";
+import { Arg } from "./decorators/arg";
 import { Logger } from "../logger";
 
 export class Container {
@@ -23,22 +24,25 @@ export class Container {
 
     if (!item) {
       if (typeof key === "string") {
-        throw new NotFoundException(
-          `Item "${strKey}" is not in the container.`
-        );
+        throw new NotFoundException(`Item "${strKey}" is not in the container.`);
       }
 
       const metadata = Service.get(key);
       if (!metadata) {
-        throw new NotFoundException(
-          `Item "${strKey}" is not in the container. Apply @Service() if it should be.`
-        );
+        throw new NotFoundException(`Item "${strKey}" is not in the container. Apply @Service() if it should be.`);
       }
+
+      const argsOverride = Arg.getArgNames(key);
 
       try {
         const args = metadata.args;
         const factory: Factory = (container) =>
-          new key(...args.map((arg: any) => container.get(arg)));
+          new key(
+            ...args.map((arg: any, idx) => {
+              const override = argsOverride[idx];
+              return override != null ? container.get(override) : container.get(arg);
+            })
+          );
         const instance = factory(this);
 
         this.cache.set(strKey, {
@@ -50,16 +54,14 @@ export class Container {
 
         return instance;
       } catch (e) {
-        this.logger.error(`While constructing "${strKey}": ${(e instanceof Error) ? e.message : e}`);
+        this.logger.error(`While constructing "${strKey}": ${e instanceof Error ? e.message : e}`);
         throw e;
       }
     }
 
     if (!item.isInitialized) {
       if (!item.factory) {
-        throw new ConstructionException(
-          `Cannot construct "${strKey}": No factory available.`
-        );
+        throw new ConstructionException(`Cannot construct "${strKey}": No factory available.`);
       }
       item.instance = item.factory(this);
       item.isInitialized = true;

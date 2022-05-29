@@ -1,13 +1,12 @@
 import { Express } from "express";
 import { ClassType } from "type-graphql";
 import { Logger } from "../logger";
-import { Container, Service } from "../container";
+import { Arg, Container, Service } from "../container";
 import { SessionService } from "../../domains/session";
 import { UserRepository } from "../../domains/user";
 import { authMiddleware } from "./middleware/auth-middleware";
 import { Method, Route } from "./decorators/route";
 import { Public } from "./decorators/public";
-import pkg from "../../../../../package.json";
 
 export type ControllerClass = ClassType;
 
@@ -19,7 +18,8 @@ export class ApiService {
   public constructor(
     private readonly container: Container,
     private readonly sessionService: SessionService,
-    private readonly userRepository: UserRepository
+    private readonly userRepository: UserRepository,
+    @Arg("version") private readonly version: string
   ) {}
 
   public addController(...controllers: ControllerClass[]) {
@@ -33,9 +33,7 @@ export class ApiService {
         throw new TypeError(`Class ${controller.name} is not a Controller.`);
       }
 
-      for (const [funcName, { method, pattern }] of Object.entries(
-        metadata.routes
-      )) {
+      for (const [funcName, { method, pattern }] of Object.entries(metadata.routes)) {
         let joinedPattern = base;
         if (!base.startsWith("/")) {
           joinedPattern = "/" + joinedPattern;
@@ -47,25 +45,14 @@ export class ApiService {
 
         app.use(
           joinedPattern,
-          authMiddleware(
-            this.sessionService,
-            this.userRepository,
-            Public.isPublic(controller, funcName),
-            joinedPattern
-          )
+          authMiddleware(this.sessionService, this.userRepository, Public.isPublic(controller, funcName), joinedPattern)
         );
         this.registerRoute(app, controller, funcName, method, joinedPattern);
       }
     }
   }
 
-  private registerRoute(
-    app: Express,
-    controller: ControllerClass,
-    funcName: string,
-    method: Method,
-    pattern: string
-  ) {
+  private registerRoute(app: Express, controller: ControllerClass, funcName: string, method: Method, pattern: string) {
     const appMethodMap = {
       GET: "get",
       POST: "post",
@@ -73,16 +60,12 @@ export class ApiService {
       DELETE: "delete",
     } as const;
 
-    this.logger.info(
-      `Registering ${controller.name}.${funcName}() as ${
-        method ?? "GET"
-      } ${pattern}`
-    );
+    this.logger.info(`Registering ${controller.name}.${funcName}() as ${method ?? "GET"} ${pattern}`);
 
     app[appMethodMap[method]](pattern, async (req, res, next) => {
       try {
         this.logger.debug(`${method} ${pattern}`);
-        res.header("X-Powered-By", `Aggro/${pkg.version}`);
+        res.header("X-Powered-By", `Aggro/${this.version}`);
         const ctr = this.container.get<any>(controller);
         const data = await ctr[funcName](req, res);
         if (data != null) {

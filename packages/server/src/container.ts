@@ -2,10 +2,12 @@ import { Pool } from "pg";
 import { Axios } from "axios";
 import RssParser from "rss-parser";
 import { Container } from "./core/container";
+import pkg from "../../../package.json";
 
 export async function initContainer(): Promise<Container> {
   const container = new Container();
 
+  container.setInstance("version", pkg.version);
   container.setInstance("port", 3000);
   container.set(
     Pool,
