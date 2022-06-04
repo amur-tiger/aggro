@@ -8,8 +8,7 @@
     "generate:watch": "graphql-codegen --watch",
     "build": "ts-node-script scripts/build.ts",
     "build:watch": "ts-node-script scripts/build.ts --watch",
-    "watch": "concurrently --kill-others \"npm:generate:watch\" \"npm:build:watch\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch": "concurrently --kill-others \"npm:generate:watch\" \"npm:build:watch\""
   },
   "dependencies": {
     "svelte": "^3.46.4"
