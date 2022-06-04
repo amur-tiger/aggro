@@ -34,8 +34,7 @@ jobs:
       - name: Increase version number
         id: version-number
         run: |
-          VERSION=$(pnpm version minor)
-          git commit --amend -m "$VERSION\n\n[ci skip]"
+          VERSION=$(pnpm version minor -m "%s [ci skip]")
           echo $VERSION
           echo "::set-output name=version::$VERSION"
 
@@ -67,4 +66,4 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit: HEAD
+          tag: ${{ steps.version-number.outputs.version }}
