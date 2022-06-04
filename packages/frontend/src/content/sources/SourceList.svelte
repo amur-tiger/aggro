@@ -2,11 +2,12 @@
   import { gql } from "graphql-tag";
   import Spinner from "../../components/Spinner.svelte";
   import Button from "../../components/Button.svelte";
-  import Textfield from "../../components/Textfield.svelte";
+  import TextField from "../../components/TextField.svelte";
   import Card from "../../components/Card.svelte";
   import SourceCard from "./SourceCard.svelte";
   import SearchIcon from "../../icons/search.svg";
   import AddIcon from "../../icons/add.svg";
+  import EditIcon from "../../icons/edit.svg";
   import DeleteIcon from "../../icons/delete.svg";
   import { query } from "../../graphql";
   import { getSources } from "../../api/sources";
@@ -32,7 +33,8 @@
     }
   `);
 
-  const { addItem, deleteItem, isLoading, items, refresh } = getSources();
+  const { addItem, deleteItem, editItem, isLoading, items, refresh } =
+    getSources();
   refresh();
 
   let discoveryLoading = false;
@@ -45,12 +47,15 @@
       })
       .finally(() => (discoveryLoading = false));
   };
+
+  let editingId = null;
+  let editingSave = false;
 </script>
 
 <Card>
   <div class="typography-headline-medium">neu</div>
 
-  <Textfield bind:value={url} label="link" />
+  <TextField bind:value={url} label="link" />
 
   <Button variant="icon-filled" on:click={handleDiscoverClick}>
     <SearchIcon slot="icon" size="32" />
@@ -81,11 +86,30 @@
     {#each $items as source}
       <li>
         <SourceCard
+          isEditing={editingId === source.id}
           title={source.title}
           type={source.type}
           url={source.uri}
           added={source.added}
+          on:change={(e) => {
+            editingSave = true;
+            editItem({
+              ...source,
+              title: e.detail.value,
+            }).finally(() => {
+              editingSave = false;
+              editingId = null;
+            });
+          }}
         >
+          <Button
+            variant="icon-filled"
+            on:click={() =>
+              (editingId = editingId === source.id ? null : source.id)}
+          >
+            <EditIcon slot="icon" size="32" />
+          </Button>
+
           <Button
             variant="icon-filled"
             on:click={() => {

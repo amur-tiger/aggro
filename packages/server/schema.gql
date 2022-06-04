@@ -29,9 +29,15 @@ type DiscoveryResult {
   items: [DiscoveryItem!]!
 }
 
+input EditSourceInput {
+  id: ID!
+  title: String!
+}
+
 type Mutation {
   addSource(input: AddSourceInput!): Source!
   deleteSource(id: ID!): Source!
+  editSource(input: EditSourceInput!): Source!
 }
 
 """Provides information about the current page."""

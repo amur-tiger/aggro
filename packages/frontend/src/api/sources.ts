@@ -6,6 +6,8 @@ import {
   AddSourceMutationVariables,
   DeleteSourceMutation,
   DeleteSourceMutationVariables,
+  EditSourceMutation,
+  EditSourceMutationVariables,
   Source,
   SourceListQuery,
   SourceListQueryVariables,
@@ -53,13 +55,25 @@ export function getSources(): WritablePaginatedList<
       totalCount.update((old) => old + 1);
     }),
 
+    editItem: withLoading(async (item) => {
+      const data = await editSourceQuery({ id: item.id, title: item.title });
+      items.update((old) =>
+        old.map((it) =>
+          it.id === data.editSource.id
+            ? {
+                ...it,
+                ...data.editSource,
+              }
+            : it
+        )
+      );
+    }),
+
     deleteItem: withLoading(async (item) => {
       const data = await deleteSourceQuery({
         id: item.id,
       });
-      items.update((old) =>
-        old.filter((item) => item.id !== data.deleteSource.id)
-      );
+      items.update((old) => old.filter((it) => it.id !== data.deleteSource.id));
       totalCount.update((old) => old - 1);
     }),
   };
@@ -99,6 +113,18 @@ const addSourceQuery = query<AddSourceMutation, AddSourceMutationVariables>(gql`
       uri
       added
       lastUpdate
+    }
+  }
+`);
+
+const editSourceQuery = query<
+  EditSourceMutation,
+  EditSourceMutationVariables
+>(gql`
+  mutation EditSource($id: ID!, $title: String!) {
+    editSource(input: { id: $id, title: $title }) {
+      id
+      title
     }
   }
 `);

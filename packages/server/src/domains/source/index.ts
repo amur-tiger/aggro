@@ -4,6 +4,10 @@
 // This file was auto-generated. Do not edit, your changes will be overwritten!
 
 export { AddSourceInput } from './api/model/add-source-input';
+export { DiscoveryArgs } from './api/model/discovery/discovery-args';
+export { DiscoveryItem } from './api/model/discovery/discovery-item';
+export { DiscoveryResult } from './api/model/discovery/discovery-result';
+export { EditSourceInput } from './api/model/edit-source-input';
 export { SourceSort } from './api/model/source-sort';
 export { Source } from './api/model/source';
 export { SourceResolver } from './api/source-resolver';

@@ -9,7 +9,9 @@ export interface PaginatedList<T> {
   previousPage: () => Promise<void>;
 }
 
-export interface WritablePaginatedList<T, TAdd = T> extends PaginatedList<T> {
+export interface WritablePaginatedList<T, TAdd = T, TEdit = T>
+  extends PaginatedList<T> {
   addItem: (item: TAdd) => Promise<void>;
+  editItem: (item: TEdit) => Promise<void>;
   deleteItem: (item: T) => Promise<void>;
 }
