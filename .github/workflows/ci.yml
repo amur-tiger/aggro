@@ -1,4 +1,4 @@
-name: "Aggro CI"
+name: "Aggro CI/CD"
 
 on:
   push:
@@ -12,9 +12,40 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Configure GIT
+        run: |
+          git config --global user.name "Aggro CI/CD"
+          git config --global user.email "amur-tiger@users.noreply.github.com"
+
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install PNPM
+        uses: pnpm/action-setup@v2.2.2
+        with:
+          version: ^6
+          run_install: false
+
+      # Note: this does not follow SEMVER
+      - name: Increase version number
+        id: version-number
+        run: |
+          VERSION=$(pnpm version minor)
+          echo $VERSION
+          echo "::set-output name=version::$VERSION"
+
       - name: Build Docker Image
         run: |
-          docker build -t ghcr.io/amur-tiger/aggro:$GITHUB_SHA -t ghcr.io/amur-tiger/aggro:latest .
+          docker build \
+            -t ghcr.io/amur-tiger/aggro:$GITHUB_SHA \
+            -t ghcr.io/amur-tiger/aggro:${{ steps.version-number.outputs.version }} \
+            -t ghcr.io/amur-tiger/aggro:latest .
+
+      - name: Push version commit
+        run: |
+          git push --follow-tags
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
@@ -27,3 +58,9 @@ jobs:
         run: |
           docker push ghcr.io/amur-tiger/aggro:$GITHUB_SHA
           docker push ghcr.io/amur-tiger/aggro:latest
+
+      - name: Create GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit: HEAD
