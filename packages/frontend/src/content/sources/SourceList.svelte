@@ -4,72 +4,20 @@
   import Button from "../../components/Button.svelte";
   import Textfield from "../../components/Textfield.svelte";
   import Card from "../../components/Card.svelte";
+  import SourceCard from "./SourceCard.svelte";
   import SearchIcon from "../../icons/search.svg";
   import AddIcon from "../../icons/add.svg";
   import DeleteIcon from "../../icons/delete.svg";
-  import { lazyQuery, query } from "../../graphql";
+  import { query } from "../../graphql";
+  import { getSources } from "../../api/sources";
   import {
-    AddSourceMutation,
-    AddSourceMutationVariables,
-    DeleteSourceMutation,
-    DeleteSourceMutationVariables,
     DiscoverSourcesQuery,
     DiscoverSourcesQueryVariables,
-    SourceListQuery,
-    SourceListQueryVariables,
   } from "../../generated/graphql";
-  import SourceCard from "./SourceCard.svelte";
 
   let url;
 
-  const sources = query<SourceListQuery, SourceListQueryVariables>(gql`
-    query SourceList {
-      sources {
-        totalCount
-        pageInfo {
-          startCursor
-          endCursor
-          hasPreviousPage
-          hasNextPage
-        }
-        edges {
-          cursor
-          node {
-            id
-            type
-            title
-            uri
-            added
-            lastUpdate
-          }
-        }
-      }
-    }
-  `);
-
-  const addSource = lazyQuery<
-    AddSourceMutation,
-    AddSourceMutationVariables
-  >(gql`
-    mutation AddSource($title: String!, $type: String!, $uri: String!) {
-      addSource(input: { title: $title, type: $type, uri: $uri }) {
-        id
-      }
-    }
-  `);
-
-  const deleteSource = lazyQuery<
-    DeleteSourceMutation,
-    DeleteSourceMutationVariables
-  >(gql`
-    mutation DeleteSource($id: ID!) {
-      deleteSource(id: $id) {
-        id
-      }
-    }
-  `);
-
-  const discover = lazyQuery<
+  const discover = query<
     DiscoverSourcesQuery,
     DiscoverSourcesQueryVariables
   >(gql`
@@ -83,6 +31,9 @@
       }
     }
   `);
+
+  const { addItem, deleteItem, isLoading, items, refresh } = getSources();
+  refresh();
 
   let discoveryLoading = false;
   let list = [];
@@ -113,7 +64,7 @@
         <Button
           variant="icon-filled"
           on:click={() => {
-            addSource({ title: item.title, type: item.type, uri: item.url });
+            addItem({ title: item.title, type: item.type, uri: item.url });
           }}
         >
           <AddIcon slot="icon" size="32" />
@@ -123,22 +74,22 @@
   {/if}
 </Card>
 
-{#await sources}
+{#if $isLoading}
   <Spinner />
-{:then data}
+{:else}
   <ul class="list">
-    {#each data.sources.edges as source}
+    {#each $items as source}
       <li>
         <SourceCard
-          title={source.node.title}
-          type={source.node.type}
-          url={source.node.uri}
-          added={source.node.added}
+          title={source.title}
+          type={source.type}
+          url={source.uri}
+          added={source.added}
         >
           <Button
             variant="icon-filled"
             on:click={() => {
-              deleteSource({ id: source.node.id });
+              deleteItem({ id: source.id });
             }}
           >
             <DeleteIcon slot="icon" size="32" />
@@ -147,11 +98,7 @@
       </li>
     {/each}
   </ul>
-{:catch err}
-  <div>
-    Error: {err.message}
-  </div>
-{/await}
+{/if}
 
 <style lang="sass">
   .list

@@ -9,38 +9,11 @@ import { GraphqlError } from "./graphql-error";
  * @param document
  * @param variables
  */
-export async function query<T = any, V = Record<string, any>>(
+export function query<T = any, V = Record<string, any>>(
   document: TypedDocumentNode<T, V>,
   variables?: V
-): Promise<T> {
-  const response = await fetch("/graphql", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      query: document,
-      variables,
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error("HTTP Error.");
-  }
-
-  const result = await response.json();
-
-  if (Array.isArray(result.errors) && result.errors.length > 0) {
-    throw new GraphqlError(result.errors);
-  }
-
-  return result.data;
-}
-
-export function lazyQuery<T = any, V = Record<string, any>>(
-  document: TypedDocumentNode<T, V>
 ): (variables?: V) => Promise<T> {
-  return async (variables) => {
+  return async (variables2) => {
     const response = await fetch("/graphql", {
       method: "POST",
       headers: {
@@ -48,7 +21,10 @@ export function lazyQuery<T = any, V = Record<string, any>>(
       },
       body: JSON.stringify({
         query: document,
-        variables,
+        variables: {
+          ...variables,
+          ...variables2,
+        },
       }),
     });
 
