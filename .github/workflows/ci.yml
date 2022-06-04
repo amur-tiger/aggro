@@ -57,6 +57,7 @@ jobs:
       - name: Publish Docker Image
         run: |
           docker push ghcr.io/amur-tiger/aggro:$GITHUB_SHA
+          docker push ghcr.io/amur-tiger/aggro:${{ steps.version-number.outputs.version }}
           docker push ghcr.io/amur-tiger/aggro:latest
 
       - name: Create GitHub release
