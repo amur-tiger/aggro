@@ -1,6 +1,6 @@
 <script lang="ts">
   import Card from "../components/Card.svelte";
-  import Textfield from "../components/Textfield.svelte";
+  import Textfield from "../components/TextField.svelte";
   import Button from "../components/Button.svelte";
   import AggroIcon from "../icons/aggro.svg";
   import { login } from "../auth";

@@ -14,6 +14,7 @@ import { DiscoveryArgs } from "./model/discovery/discovery-args";
 import { DiscoveryResult } from "./model/discovery/discovery-result";
 import { SourceService } from "../service/source-service";
 import { DiscoveryItem } from "./model/discovery/discovery-item";
+import { EditSourceInput } from "./model/edit-source-input";
 
 const [SourcePage, SourceEdge] = Connection(Source);
 
@@ -77,6 +78,22 @@ export class SourceResolver {
     this.logger.info(`Adding source "${title}" from "${uri}" for "${user.username}"`);
     await this.repository.insert(source);
     return new Source(source.id, source.type, source.title, source.uri, source.added, source.lastupdate);
+  }
+
+  @Mutation(() => Source)
+  public async editSource(@CurrentUser() user: UserEntity, @Arg("input") { id, title }: EditSourceInput) {
+    const source = await this.repository.findOneBy("id", id);
+    if (!source || source.userid !== user.id) {
+      throw new NotFoundException();
+    }
+
+    if (source.title === title) {
+      return source;
+    }
+
+    source.title = title;
+    await this.repository.update(source);
+    return source;
   }
 
   @Mutation(() => Source)
