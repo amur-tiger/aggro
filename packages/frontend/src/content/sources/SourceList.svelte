@@ -11,6 +11,8 @@
   import {
     AddSourceMutation,
     AddSourceMutationVariables,
+    DeleteSourceMutation,
+    DeleteSourceMutationVariables,
     DiscoverSourcesQuery,
     DiscoverSourcesQueryVariables,
     SourceListQuery,
@@ -56,7 +58,10 @@
     }
   `);
 
-  const deleteSource = lazyQuery<>(gql`
+  const deleteSource = lazyQuery<
+    DeleteSourceMutation,
+    DeleteSourceMutationVariables
+  >(gql`
     mutation DeleteSource($id: ID!) {
       deleteSource(id: $id) {
         id
