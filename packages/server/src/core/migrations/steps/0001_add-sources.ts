@@ -3,7 +3,7 @@ import { Migration } from "../migration";
 export const addSources: Migration = {
   id: 1,
   name: "Add Sources",
-  async up(client, logger) {
+  async up(client, _container, logger) {
     logger.info('Creating table "source"');
     await client.query(
       `CREATE TABLE source
