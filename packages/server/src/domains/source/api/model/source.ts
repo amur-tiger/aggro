@@ -6,14 +6,16 @@ export class Source {
     id: string,
     type: string,
     title: string,
-    uri: string,
+    url: string,
+    faviconUrl: string,
     added: Date,
     lastUpdate: Date | null
   ) {
     this.id = id;
     this.type = type;
     this.title = title;
-    this.uri = uri;
+    this.url = url;
+    this.faviconUrl = faviconUrl;
     this.added = added;
     this.lastUpdate = lastUpdate;
   }
@@ -28,7 +30,10 @@ export class Source {
   public readonly title: string;
 
   @Field()
-  public readonly uri: string;
+  public readonly url: string;
+
+  @Field()
+  public readonly faviconUrl: string;
 
   @Field()
   public readonly added: Date;

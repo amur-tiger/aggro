@@ -95,7 +95,8 @@ const fetchSourcesQuery = query<SourceListQuery, SourceListQueryVariables>(gql`
           id
           type
           title
-          uri
+          url
+          faviconUrl
           added
           lastUpdate
         }
@@ -105,12 +106,13 @@ const fetchSourcesQuery = query<SourceListQuery, SourceListQueryVariables>(gql`
 `);
 
 const addSourceQuery = query<AddSourceMutation, AddSourceMutationVariables>(gql`
-  mutation AddSource($title: String!, $type: String!, $uri: String!) {
-    addSource(input: { title: $title, type: $type, uri: $uri }) {
+  mutation AddSource($title: String!, $type: String!, $url: String!) {
+    addSource(input: { title: $title, type: $type, url: $url }) {
       id
       type
       title
-      uri
+      url
+      faviconUrl
       added
       lastUpdate
     }

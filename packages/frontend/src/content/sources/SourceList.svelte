@@ -28,6 +28,7 @@
           type
           title
           url
+          faviconUrl
         }
       }
     }
@@ -65,11 +66,11 @@
     <Spinner />
   {:else}
     {#each list as item}
-      <SourceCard title={item.title} type={item.type} url={item.url}>
+      <SourceCard title={item.title} type={item.type} url={item.url} faviconUrl={item.faviconUrl}>
         <Button
           variant="icon-filled"
           on:click={() => {
-            addItem({ title: item.title, type: item.type, uri: item.url });
+            addItem({ title: item.title, type: item.type, url: item.url });
           }}
         >
           <AddIcon slot="icon" size="32" />
@@ -89,7 +90,8 @@
           isEditing={editingId === source.id}
           title={source.title}
           type={source.type}
-          url={source.uri}
+          url={source.url}
+          faviconUrl={source.faviconUrl}
           added={source.added}
           on:change={(e) => {
             editingSave = true;

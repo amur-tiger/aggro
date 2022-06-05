@@ -2,10 +2,11 @@ import { Field, ObjectType } from "type-graphql";
 
 @ObjectType()
 export class DiscoveryItem {
-  constructor(type: string, title: string, url: string) {
+  constructor(type: string, title: string, url: string, faviconUrl: string) {
     this.type = type;
     this.title = title;
     this.url = url;
+    this.faviconUrl = faviconUrl;
   }
 
   @Field()
@@ -16,4 +17,7 @@ export class DiscoveryItem {
 
   @Field()
   public readonly url: string;
+
+  @Field()
+  public readonly faviconUrl: string;
 }
