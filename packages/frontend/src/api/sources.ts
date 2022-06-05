@@ -96,6 +96,7 @@ const fetchSourcesQuery = query<SourceListQuery, SourceListQueryVariables>(gql`
           type
           title
           url
+          faviconUrl
           added
           lastUpdate
         }
@@ -111,6 +112,7 @@ const addSourceQuery = query<AddSourceMutation, AddSourceMutationVariables>(gql`
       type
       title
       url
+      faviconUrl
       added
       lastUpdate
     }

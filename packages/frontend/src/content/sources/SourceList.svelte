@@ -28,6 +28,7 @@
           type
           title
           url
+          faviconUrl
         }
       }
     }
@@ -65,7 +66,7 @@
     <Spinner />
   {:else}
     {#each list as item}
-      <SourceCard title={item.title} type={item.type} url={item.url}>
+      <SourceCard title={item.title} type={item.type} url={item.url} faviconUrl={item.faviconUrl}>
         <Button
           variant="icon-filled"
           on:click={() => {
@@ -90,6 +91,7 @@
           title={source.title}
           type={source.type}
           url={source.url}
+          faviconUrl={source.faviconUrl}
           added={source.added}
           on:change={(e) => {
             editingSave = true;

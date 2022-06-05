@@ -72,4 +72,102 @@ export class SourceService {
     this.logger.info(`Discovered ${result.length} sources at ${url}`);
     return result;
   }
+
+  public async findFavicon(link: string): Promise<string> {
+    const url = new URL(link);
+    const baseUrl = `${url.origin}/`;
+    this.logger.debug(`Searching favicon at ${baseUrl}`);
+    const favicons: { url: string; sizes: string }[] = [];
+
+    const manifestResponse = await fetch(`${baseUrl}manifest.json`, {
+      headers: {
+        "User-Agent": `Aggro/${this.version}`,
+      },
+    });
+
+    try {
+      if (manifestResponse.ok) {
+        const manifest = await manifestResponse.json();
+        if (manifest && typeof manifest === "object" && Array.isArray(manifest.icons)) {
+          for (const icon of manifest.icons) {
+            const iconUrl = new URL(icon.src, baseUrl).toString();
+            this.logger.debug(`Found favicon at ${iconUrl} (via manifest)`);
+            favicons.push({
+              url: iconUrl,
+              sizes: icon.sizes,
+            });
+          }
+        }
+      }
+    } catch (e) {
+      this.logger.debug(`Site at ${baseUrl} does not have valid manifest`);
+    }
+
+    if (favicons.length === 0) {
+      const response = await fetch(baseUrl, {
+        headers: {
+          "User-Agent": `Aggro/${this.version}`,
+        },
+      });
+      const text = await response.text();
+
+      try {
+        const document = query(wrapNode, parse(text));
+
+        const appleTouchIcon = document.select("link[rel=apple-touch-icon]");
+        const appleTouchIconHref = appleTouchIcon.attr("href");
+        if (appleTouchIconHref) {
+          const iconUrl = new URL(appleTouchIconHref, baseUrl).toString();
+          this.logger.debug(`Found favicon at ${iconUrl} (via apple touch icon)`);
+          favicons.push({
+            url: iconUrl,
+            sizes: appleTouchIcon.attr("sizes") ?? "180x180",
+          });
+        }
+
+        const links = document.select("link[rel~=icon]");
+        for (const link of links) {
+          const href = link.attr("href");
+          if (href) {
+            const iconUrl = new URL(href, baseUrl).toString();
+            this.logger.debug(`Found favicon at ${iconUrl} (via link)`);
+            favicons.push({
+              url: iconUrl,
+              sizes: link.attr("sizes") ?? "32x32",
+            });
+          }
+        }
+      } catch (e) {
+        this.logger.debug(`Failed to extract favicon from HTML`);
+        this.logger.debug(e);
+      }
+    }
+
+    favicons.push({
+      url: baseUrl + "favicon.ico",
+      sizes: "32x32",
+    });
+
+    const favicon = favicons.reduce((previous, current) => {
+      const reducer = (p: number, c: string): number =>
+        c === "any" ? Number.MAX_SAFE_INTEGER : Math.max(p, +c.split("x")[0]);
+      const prevSize = previous.sizes.split(/\s+/).reduce(reducer, 0);
+      const currSize = current.sizes.split(/\s+/).reduce(reducer, 0);
+
+      this.logger.debug(`${previous.url} (${prevSize}) VS ${current.url} (${currSize})`);
+
+      if (prevSize === currSize) {
+        if (previous.url.endsWith(".ico")) {
+          return current;
+        }
+        if (current.url.endsWith(".ico")) {
+          return previous;
+        }
+      }
+      return prevSize > currSize ? previous : current;
+    });
+
+    this.logger.debug(`Selected favicon at ${favicon.url}`);
+    return favicon.url;
+  }
 }

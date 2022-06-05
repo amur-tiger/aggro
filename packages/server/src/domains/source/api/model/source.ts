@@ -7,6 +7,7 @@ export class Source {
     type: string,
     title: string,
     url: string,
+    faviconUrl: string,
     added: Date,
     lastUpdate: Date | null
   ) {
@@ -14,6 +15,7 @@ export class Source {
     this.type = type;
     this.title = title;
     this.url = url;
+    this.faviconUrl = faviconUrl;
     this.added = added;
     this.lastUpdate = lastUpdate;
   }
@@ -29,6 +31,9 @@ export class Source {
 
   @Field()
   public readonly url: string;
+
+  @Field()
+  public readonly faviconUrl: string;
 
   @Field()
   public readonly added: Date;

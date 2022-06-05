@@ -8,6 +8,7 @@
   export let title: string;
   export let type: string;
   export let url: string;
+  export let faviconUrl: string;
   export let added: Date | null = null;
   export let isEditing: boolean = false;
 
@@ -17,11 +18,7 @@
 </script>
 
 <Card imagePosition="left">
-  <img
-    slot="image"
-    src={"//" + new URL(url).host + "/favicon.ico"}
-    alt="icon"
-  />
+  <img slot="image" src={faviconUrl} alt="icon" />
 
   <h2 slot="header" class="typography-headline-small">
     {#if isEditing}

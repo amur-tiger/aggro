@@ -20,6 +20,7 @@ The javascript `Date` as string. Type represents date and time as the ISO Date s
 scalar DateTime
 
 type DiscoveryItem {
+  faviconUrl: String!
   title: String!
   type: String!
   url: String!
@@ -64,6 +65,7 @@ type Query {
 
 type Source {
   added: DateTime!
+  faviconUrl: String!
   id: ID!
   lastUpdate: DateTime
   title: String!

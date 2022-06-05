@@ -29,7 +29,9 @@ function makeSearch(wrap: WrapQueryInterface): (node: any, select: SelectorEleme
   return search;
 }
 
-export interface Query<T = any> {
+export interface Query<T = any> extends Iterable<Query<T>> {
+  length: number;
+
   select(selector: string): Query<T>;
 
   first(): Query<T>;
@@ -43,6 +45,8 @@ export function query<T = any>(wrap: WrapQueryInterface<T>, node: unknown): Quer
   const search = makeSearch(wrap);
   const current = Array.isArray(node) ? node : [node];
   return {
+    length: current.length,
+
     select(selector: string): Query {
       const selectors = parseSelector(selector);
 
@@ -74,6 +78,12 @@ export function query<T = any>(wrap: WrapQueryInterface<T>, node: unknown): Quer
         content += wrap(n).getTextContent();
       }
       return content;
+    },
+
+    *[Symbol.iterator](): Iterator<Query> {
+      for (const n of current) {
+        yield query(wrap, n);
+      }
     },
   };
 }

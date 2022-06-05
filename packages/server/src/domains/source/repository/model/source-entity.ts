@@ -6,4 +6,5 @@ export interface SourceEntity {
   url: string;
   added: Date;
   lastupdate: Date | null;
+  favicon_url: string;
 }
