@@ -58,26 +58,26 @@ export class SourceResolver {
       await this.repository.count(new Filter(sortField).user(user)),
       new PageInfo(false, false, new Cursor(sources[0]?.id), new Cursor(sources[sources.length - 1]?.id)),
       sources.map(
-        (s) => new SourceEdge(new Cursor(s.id), new Source(s.id, s.type, s.title, s.uri, s.added, s.lastupdate))
+        (s) => new SourceEdge(new Cursor(s.id), new Source(s.id, s.type, s.title, s.url, s.added, s.lastupdate))
       )
     );
   }
 
   @Mutation(() => Source)
-  public async addSource(@CurrentUser() user: UserEntity, @Arg("input") { type, title, uri }: AddSourceInput) {
+  public async addSource(@CurrentUser() user: UserEntity, @Arg("input") { type, title, url }: AddSourceInput) {
     const source: SourceEntity = {
       id: randomUUID(),
       userid: user.id,
       type,
       title,
-      uri,
+      url,
       added: new Date(),
       lastupdate: null,
     };
 
-    this.logger.info(`Adding source "${title}" from "${uri}" for "${user.username}"`);
+    this.logger.info(`Adding source "${title}" from "${url}" for "${user.username}"`);
     await this.repository.insert(source);
-    return new Source(source.id, source.type, source.title, source.uri, source.added, source.lastupdate);
+    return new Source(source.id, source.type, source.title, source.url, source.added, source.lastupdate);
   }
 
   @Mutation(() => Source)
@@ -103,8 +103,8 @@ export class SourceResolver {
       throw new NotFoundException();
     }
 
-    this.logger.info(`Deleting source "${source.title}" from "${source.uri}" for "${user.username}"`);
+    this.logger.info(`Deleting source "${source.title}" from "${source.url}" for "${user.username}"`);
     await this.repository.delete(source);
-    return new Source(source.id, source.type, source.title, source.uri, source.added, source.lastupdate);
+    return new Source(source.id, source.type, source.title, source.url, source.added, source.lastupdate);
   }
 }

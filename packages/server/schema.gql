@@ -6,7 +6,7 @@
 input AddSourceInput {
   title: String!
   type: String!
-  uri: String!
+  url: String!
 }
 
 """
@@ -68,7 +68,7 @@ type Source {
   lastUpdate: DateTime
   title: String!
   type: String!
-  uri: String!
+  url: String!
 }
 
 """

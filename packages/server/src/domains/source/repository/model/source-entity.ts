@@ -3,7 +3,7 @@ export interface SourceEntity {
   userid: string;
   type: string;
   title: string;
-  uri: string;
+  url: string;
   added: Date;
   lastupdate: Date | null;
 }

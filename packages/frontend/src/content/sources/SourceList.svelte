@@ -69,7 +69,7 @@
         <Button
           variant="icon-filled"
           on:click={() => {
-            addItem({ title: item.title, type: item.type, uri: item.url });
+            addItem({ title: item.title, type: item.type, url: item.url });
           }}
         >
           <AddIcon slot="icon" size="32" />
@@ -89,7 +89,7 @@
           isEditing={editingId === source.id}
           title={source.title}
           type={source.type}
-          url={source.uri}
+          url={source.url}
           added={source.added}
           on:change={(e) => {
             editingSave = true;

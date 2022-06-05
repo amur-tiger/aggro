@@ -2,10 +2,10 @@ import { Field, InputType } from "type-graphql";
 
 @InputType()
 export class AddSourceInput {
-  constructor(type: string, title: string, uri: string) {
+  constructor(type: string, title: string, url: string) {
     this.type = type;
     this.title = title;
-    this.uri = uri;
+    this.url = url;
   }
 
   @Field()
@@ -15,5 +15,5 @@ export class AddSourceInput {
   public readonly title: string;
 
   @Field()
-  public readonly uri: string;
+  public readonly url: string;
 }

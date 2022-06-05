@@ -10,23 +10,23 @@ export class SourceRepository extends Repository<SourceEntity> {
     await this.client.query(
       `UPDATE source
        SET title = $1,
-           uri = $2,
+           url = $2,
            lastupdate = $3
        WHERE id = $4`,
-      [entity.title, entity.uri, entity.lastupdate, entity.id]
+      [entity.title, entity.url, entity.lastupdate, entity.id]
     );
   }
 
   public async insert(entity: SourceEntity): Promise<void> {
     await this.client.query(
-      `INSERT INTO source (id, userid, type, title, uri, added, lastupdate)
+      `INSERT INTO source (id, userid, type, title, url, added, lastupdate)
        VALUES ($1, $2, $3, $4, $5, $6, $7)`,
       [
         entity.id,
         entity.userid,
         entity.type,
         entity.title,
-        entity.uri,
+        entity.url,
         entity.added,
         entity.lastupdate,
       ]
