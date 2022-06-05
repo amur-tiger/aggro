@@ -1,5 +1,6 @@
 import { Pool } from "pg";
 import { Container } from "./core/container";
+import { FeedHandler } from "./domains/source";
 import pkg from "../../../package.json";
 
 export async function initContainer(): Promise<Container> {
@@ -18,6 +19,7 @@ export async function initContainer(): Promise<Container> {
         password: process.env.AGGRO_DB_PASSWORD ?? "aggropass",
       })
   );
+  container.set("source-handlers", (c) => [c.get(FeedHandler)]);
 
   return container;
 }

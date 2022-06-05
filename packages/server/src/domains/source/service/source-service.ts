@@ -3,7 +3,6 @@ import { parseStringPromise } from "xml2js";
 import { parse } from "parse5";
 import { Arg, Service } from "../../../core/container";
 import { SourceHandler } from "../handler/source-handler";
-import { FeedHandler } from "../handler/feed/feed-handler";
 import { SourceLink } from "../handler/source-link";
 import { query } from "../selector/select";
 import { wrapJson, wrapNode, WrapQueryInterface } from "../selector/query-interface";
@@ -12,11 +11,11 @@ import { Logger } from "../../../core/logger";
 @Service()
 export class SourceService {
   private readonly logger = new Logger(SourceService);
-  private readonly handlers: SourceHandler[];
 
-  public constructor(@Arg("version") private readonly version: string, rssHandler: FeedHandler) {
-    this.handlers = [rssHandler];
-  }
+  public constructor(
+    @Arg("version") private readonly version: string,
+    @Arg("source-handlers") private readonly handlers: SourceHandler[]
+  ) {}
 
   public async findSourceLinks(url: string): Promise<SourceLink[]> {
     const queue = [url];
@@ -153,8 +152,6 @@ export class SourceService {
         c === "any" ? Number.MAX_SAFE_INTEGER : Math.max(p, +c.split("x")[0]);
       const prevSize = previous.sizes.split(/\s+/).reduce(reducer, 0);
       const currSize = current.sizes.split(/\s+/).reduce(reducer, 0);
-
-      this.logger.debug(`${previous.url} (${prevSize}) VS ${current.url} (${currSize})`);
 
       if (prevSize === currSize) {
         if (previous.url.endsWith(".ico")) {
