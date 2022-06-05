@@ -11,6 +11,7 @@ import { Logger } from "../../../core/logger";
 @Service()
 export class SourceService {
   private readonly logger = new Logger(SourceService);
+  private readonly faviconCache = new Map<string, [number, Promise<string>]>();
 
   public constructor(
     @Arg("version") private readonly version: string,
@@ -74,11 +75,25 @@ export class SourceService {
 
   public async findFavicon(link: string): Promise<string> {
     const url = new URL(link);
-    const baseUrl = `${url.origin}/`;
-    this.logger.debug(`Searching favicon at ${baseUrl}`);
+    const existing = this.faviconCache.get(url.origin);
+    if (existing) {
+      const [stamp, iconUrl] = existing;
+      if (stamp + 60 * 1000 > Date.now()) {
+        this.logger.debug(`Returning favicon at ${url.origin} from cache`);
+        return iconUrl;
+      }
+    }
+
+    const promise = this.findFaviconActual(url);
+    this.faviconCache.set(url.origin, [Date.now(), promise]);
+    return promise;
+  }
+
+  private async findFaviconActual(url: URL): Promise<string> {
+    this.logger.debug(`Searching favicon at ${url.origin}`);
     const favicons: { url: string; sizes: string }[] = [];
 
-    const manifestResponse = await fetch(`${baseUrl}manifest.json`, {
+    const manifestResponse = await fetch(`${url.origin}/manifest.json`, {
       headers: {
         "User-Agent": `Aggro/${this.version}`,
       },
@@ -89,7 +104,7 @@ export class SourceService {
         const manifest = await manifestResponse.json();
         if (manifest && typeof manifest === "object" && Array.isArray(manifest.icons)) {
           for (const icon of manifest.icons) {
-            const iconUrl = new URL(icon.src, baseUrl).toString();
+            const iconUrl = new URL(icon.src, url.origin).toString();
             this.logger.debug(`Found favicon at ${iconUrl} (via manifest)`);
             favicons.push({
               url: iconUrl,
@@ -99,11 +114,11 @@ export class SourceService {
         }
       }
     } catch (e) {
-      this.logger.debug(`Site at ${baseUrl} does not have valid manifest`);
+      this.logger.debug(`Site at ${url.origin} does not have valid manifest`);
     }
 
     if (favicons.length === 0) {
-      const response = await fetch(baseUrl, {
+      const response = await fetch(url.origin, {
         headers: {
           "User-Agent": `Aggro/${this.version}`,
         },
@@ -116,7 +131,7 @@ export class SourceService {
         const appleTouchIcon = document.select("link[rel=apple-touch-icon]");
         const appleTouchIconHref = appleTouchIcon.attr("href");
         if (appleTouchIconHref) {
-          const iconUrl = new URL(appleTouchIconHref, baseUrl).toString();
+          const iconUrl = new URL(appleTouchIconHref, url.origin).toString();
           this.logger.debug(`Found favicon at ${iconUrl} (via apple touch icon)`);
           favicons.push({
             url: iconUrl,
@@ -128,7 +143,7 @@ export class SourceService {
         for (const link of links) {
           const href = link.attr("href");
           if (href) {
-            const iconUrl = new URL(href, baseUrl).toString();
+            const iconUrl = new URL(href, url.origin).toString();
             this.logger.debug(`Found favicon at ${iconUrl} (via link)`);
             favicons.push({
               url: iconUrl,
@@ -143,7 +158,7 @@ export class SourceService {
     }
 
     favicons.push({
-      url: baseUrl + "favicon.ico",
+      url: url.origin + "/favicon.ico",
       sizes: "32x32",
     });
 
