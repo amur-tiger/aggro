@@ -1,17 +1,17 @@
 import { Migration } from "../migration";
-import { FeedHandler, SourceService } from "../../../domains/source";
+import { SourceService } from "../../../domains/source";
 
 export const addFavicon: Migration = {
   id: 3,
   name: "Add Favicon",
-  async up(client, logger) {
+  async up(client, container, logger) {
     logger.info('Altering table "source"');
     await client.query(
       `ALTER TABLE source
           ADD COLUMN favicon_url VARCHAR(256) NULL`
     );
 
-    const service = new SourceService("1.3.0", null as unknown as FeedHandler);
+    const service = container.get(SourceService);
 
     const entries = await client.query(`SELECT id, url
                                         FROM source`);

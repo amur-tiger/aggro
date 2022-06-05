@@ -3,7 +3,7 @@ import { Migration } from "../migration";
 export const init: Migration = {
   id: 0,
   name: "Init",
-  async up(client, logger) {
+  async up(client, _container, logger) {
     logger.info('Creating table "user"');
     await client.query(
       `CREATE TABLE "user"
