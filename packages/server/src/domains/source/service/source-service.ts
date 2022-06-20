@@ -93,13 +93,13 @@ export class SourceService {
     this.logger.debug(`Searching favicon at ${url.origin}`);
     const favicons: { url: string; sizes: string }[] = [];
 
-    const manifestResponse = await fetch(`${url.origin}/manifest.json`, {
-      headers: {
-        "User-Agent": `Aggro/${this.version}`,
-      },
-    });
-
     try {
+      const manifestResponse = await fetch(`${url.origin}/manifest.json`, {
+        headers: {
+          "User-Agent": `Aggro/${this.version}`,
+        },
+      });
+
       if (manifestResponse.ok) {
         const manifest = await manifestResponse.json();
         if (manifest && typeof manifest === "object" && Array.isArray(manifest.icons)) {
@@ -118,14 +118,14 @@ export class SourceService {
     }
 
     if (favicons.length === 0) {
-      const response = await fetch(url.origin, {
-        headers: {
-          "User-Agent": `Aggro/${this.version}`,
-        },
-      });
-      const text = await response.text();
-
       try {
+        const response = await fetch(url.origin, {
+          headers: {
+            "User-Agent": `Aggro/${this.version}`,
+          },
+        });
+
+        const text = await response.text();
         const document = query(wrapNode, parse(text));
 
         const appleTouchIcon = document.select("link[rel=apple-touch-icon]");
