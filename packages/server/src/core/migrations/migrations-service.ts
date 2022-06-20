@@ -11,15 +11,19 @@ export class MigrationsService {
 
   public async init() {
     this.logger.debug("Checking database schema status");
-    await this.client.query(`CREATE TABLE IF NOT EXISTS aggro_metadata
-                             (
-                                 id   INT         NOT NULL PRIMARY KEY,
-                                 name VARCHAR(16) NOT NULL,
-                                 date TIMESTAMPTZ NOT NULL
-                             )`);
+    await this.client.query(
+      `CREATE TABLE IF NOT EXISTS aggro_metadata
+       (
+           id   INT         NOT NULL PRIMARY KEY,
+           name VARCHAR(16) NOT NULL,
+           date TIMESTAMPTZ NOT NULL
+       )`
+    );
 
-    const savedMigrationsResponse = await this.client.query(`SELECT id, name
-                                                             FROM aggro_metadata`);
+    const savedMigrationsResponse = await this.client.query(
+      `SELECT id, name
+       FROM aggro_metadata`
+    );
 
     const sortedMigrations = [...migrations].sort((a, b) => a.id - b.id);
     for (const migration of sortedMigrations) {
