@@ -6,16 +6,28 @@ import { Service } from "../../../core/container";
 import { UserService } from "../../user";
 import { SessionService } from "../service/session-service";
 
+interface UserData {
+  isLoggedIn: boolean;
+  message: string;
+  session?: {
+    created: Date;
+  };
+  user?: {
+    id: string;
+    lastlogin: Date | null;
+    mail: string;
+    registered: Date;
+    username: string;
+  };
+}
+
 @Service()
 export class LoginController {
-  public constructor(
-    private readonly userService: UserService,
-    private readonly sessionService: SessionService
-  ) {}
+  public constructor(private readonly userService: UserService, private readonly sessionService: SessionService) {}
 
   @Public()
   @Route()
-  public async me(req: Request) {
+  public async me(req: Request): Promise<UserData> {
     if (!req.session || !req.user) {
       return {
         isLoggedIn: false,
@@ -41,7 +53,7 @@ export class LoginController {
 
   @Public()
   @Route({ method: "POST" })
-  public async login(req: Request, res: Response) {
+  public async login(req: Request, res: Response): Promise<UserData> {
     const mail = getRequiredParameter(req, "mail");
     const password = getRequiredParameter(req, "password");
 
@@ -50,18 +62,34 @@ export class LoginController {
       throw new UnauthorizedException("Invalid credentials.");
     }
 
-    await this.sessionService.startSession(user, res);
+    const session = await this.sessionService.startSession(user, res);
 
-    return {};
+    return {
+      isLoggedIn: true,
+      message: "Logged in",
+      session: {
+        created: session.created,
+      },
+      user: {
+        id: user.id,
+        username: user.username,
+        mail: user.mail,
+        registered: user.registered,
+        lastlogin: user.lastlogin,
+      },
+    };
   }
 
   @Route({ method: "POST" })
-  public async logout(req: Request, res: Response) {
+  public async logout(req: Request, res: Response): Promise<UserData> {
     if (!req.session) {
       throw new Error("Logic error: Session not found.");
     }
     await this.sessionService.closeSession(req.session, res);
 
-    return {};
+    return {
+      isLoggedIn: false,
+      message: "Unauthorized",
+    };
   }
 }

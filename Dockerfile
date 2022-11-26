@@ -29,7 +29,7 @@ WORKDIR /app
 COPY --from=base /app/package.json ./package.json
 COPY --from=dependencies /app/node_modules/ ./node_modules/
 COPY --from=dependencies /app/packages/server/node_modules/ ./packages/server/node_modules/
-COPY --from=build /app/packages/frontend/public/ ./packages/frontend/public/
+COPY --from=build /app/packages/app/public/ ./packages/app/public/
 COPY --from=build /app/packages/server/build/ ./packages/server/build/
 
 CMD ["/app/packages/server/build/main.js"]

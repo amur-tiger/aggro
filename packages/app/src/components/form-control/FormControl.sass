@@ -1,0 +1,54 @@
+.form-control
+  margin-top: 16px
+  position: relative
+
+  label
+    position: absolute
+    top: 0
+    left: 0
+    transform: translate(7px, -9px) scale(0.75)
+    transform-origin: top left
+    color: rgba(0, 0, 0, 0.6)
+    background-color: var(--color-surface)
+    padding: 0 10px
+
+  input
+    font: inherit
+    box-sizing: border-box
+    padding: 16px
+    width: 100%
+    outline: none
+    background: none
+    border: none
+    filter: none
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus
+    -webkit-box-shadow: 0 0 0 1000px var(--color-surface) inset !important
+
+  .outline
+    pointer-events: none
+    border: 1px solid var(--color-outline)
+    border-radius: 4px
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+
+  input:hover ~ .outline
+    border-color: #000
+
+  input:focus ~ label
+    color: var(--color-secondary)
+
+  input:focus ~ .outline
+    border-color: var(--color-secondary)
+    border-width: 2px
+
+  .small
+    margin-top: 8px
+
+    input
+      padding: 8px 16px

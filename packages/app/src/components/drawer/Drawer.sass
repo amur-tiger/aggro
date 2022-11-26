@@ -1,0 +1,25 @@
+@use "../../config"
+
+.drawer-container
+  position: fixed
+  top: 0
+  right: 0
+  bottom: 0
+  width: 0
+  max-width: 100vw
+  z-index: 1200
+  box-shadow: var(--shadow-5)
+  background-color: var(--color-background)
+  transition: width config.$fast ease-in
+  overflow: hidden
+
+  &.shown
+    width: 480px
+    transition: width config.$fast ease-out
+
+.drawer
+  width: 480px
+  height: 100vh
+  position: relative
+  overflow-y: scroll
+  padding: calc(var(--spacing, 8px) * 2)

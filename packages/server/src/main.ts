@@ -44,7 +44,7 @@ async function main() {
   app.use(cookieParser());
   app.use(Express.urlencoded({ extended: true }));
   app.use(Express.json());
-  app.use(Express.static(join(__dirname, "../../frontend/public")));
+  app.use(Express.static(join(__dirname, "../../app/public")));
 
   const apiService = container.get(ApiService);
   apiService.addController(LoginController);
@@ -68,7 +68,7 @@ async function main() {
   gqlServer.applyMiddleware({ app, path });
 
   app.use("*", (_, res) => {
-    res.sendFile(join(__dirname, "../../frontend/public/index.html"));
+    res.sendFile(join(__dirname, "../../app/public/index.html"));
   });
   app.use(exceptionHandler());
 
