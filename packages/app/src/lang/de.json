@@ -1,16 +1,13 @@
 {
-  "appbar.title": "Aggro",
   "login.mail": "E-Mail",
   "login.mail.helper-text": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
   "login.password": "Passwort",
   "login.password.helper-text": "Bitte geben Sie ein Passwort mit mindestens acht Zeichen ein.",
   "login.submit": "Einloggen",
   "login.title": "Aggro",
-  "sidebar.options": "Optionen",
-  "sidebar.sources": "Quellen",
-  "source-card.save": "Speichern",
-  "source-card.title": "Titel",
+  "source.add.form-label": "Quellen-URL",
+  "source.add.search": "Suchen",
+  "source.add.title": "Quelle hinzufügen",
   "title.login": "Login",
-  "title.settings": "Optionen",
   "title.sources": "Quellen"
 }

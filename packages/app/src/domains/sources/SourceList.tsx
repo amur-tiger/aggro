@@ -1,7 +1,8 @@
-import { createResource, For } from "solid-js";
+import { createResource, createSignal, For } from "solid-js";
 import gql from "graphql-tag";
 import { createQuery } from "../../graphql";
 import { Card } from "../../components";
+import AddSource from "./add-source/AddSource";
 import { SourcesQuery, SourcesQueryVariables } from "../../generated/graphql";
 import "./SourceList.sass";
 
@@ -36,11 +37,19 @@ const fetchSources = createQuery<SourcesQuery, SourcesQueryVariables>(
 export interface SourceListProps {}
 
 export default function SourceList() {
-  const [sources] = createResource(fetchSources);
+  const [isOpen, setOpen] = createSignal(false);
+  const [sources, { refetch }] = createResource(fetchSources);
+
+  const handleAddSource = () => {
+    refetch();
+    setOpen(false);
+  };
 
   return (
     <div class="source-list">
       total: {sources()?.sources.totalCount}
+      <button onClick={() => setOpen(true)}>+</button>
+      <AddSource open={isOpen()} onClose={() => setOpen(false)} onAddSource={handleAddSource} />
       <For each={sources()?.sources.edges}>
         {({ node }) => (
           <Card>
