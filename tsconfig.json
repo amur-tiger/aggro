@@ -1,8 +1,0 @@
-{
-  "compilerOptions": {
-    "composite": true,
-    "resolveJsonModule": true,
-    "rootDir": "."
-  },
-  "files": ["package.json"]
-}
